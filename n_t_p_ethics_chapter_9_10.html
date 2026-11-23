@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICAEW Ethics — Chapter 9 & 10 Study Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* 3D Flashcard Flip Animation */
+    .perspective-1000 {
+      perspective: 1200px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+
+    /* Smooth Card Transition */
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-slide {
+      animation: fadeSlide 0.22s ease-out;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- ==================== STICKY HEADER ==================== -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 space-y-3">
+      <!-- Top Row: Brand & Chapter Switcher -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="brand-badge" class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white font-extrabold text-sm shadow-sm shrink-0">
+            C9
+          </div>
+          <div>
+            <h1 id="header-title" class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Chapter 9: Threats and safeguards</h1>
+            <p id="header-subtitle" class="text-xs text-slate-500">ICAEW Code of Ethics • 39 mục câu hỏi & 16 Flashcards</p>
+          </div>
+        </div>
+
+        <!-- Chapter Switcher -->
+        <div class="inline-flex bg-slate-100 p-1 rounded-xl w-full md:w-auto">
+          <button id="ch-btn-c9" onclick="switchChapter('c9')" class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-violet-600 text-white shadow-sm">
+            Chapter 9 (39 câu)
+          </button>
+          <button id="ch-btn-c10" onclick="switchChapter('c10')" class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+            Chapter 10 (42 câu)
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Row: 2 Main Tabs -->
+      <nav class="flex bg-slate-100 p-1 rounded-xl w-full sm:w-fit">
+        <button id="tab-quiz" onclick="switchTab('quiz')" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-white text-violet-700 shadow-sm">
+          Trắc nghiệm (Carousel)
+        </button>
+        <button id="tab-flashcards" onclick="switchTab('flashcards')" class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
+          Flashcards ôn mỗi ngày (16)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-5 sm:py-7">
+
+    <!-- ==================== TAB 1: QUIZ CAROUSEL ==================== -->
+    <section id="view-quiz" class="space-y-4 sm:space-y-5">
+
+      <!-- Mode & Cycle Control Bar -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <!-- Mode Toggle -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Chế độ:</span>
+          <div class="inline-flex bg-slate-100 p-1 rounded-xl">
+            <button id="mode-practice" onclick="setQuizMode('practice')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-violet-600 text-white shadow-sm">
+              Luyện tập (Hiện đáp án ngay)
+            </button>
+            <button id="mode-exam" onclick="setQuizMode('exam')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:text-slate-900">
+              Kiểm tra (Nộp bài cuối chu kỳ)
+            </button>
+          </div>
+        </div>
+
+        <!-- Cycle & Quick Tools -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span id="cycle-badge" class="px-3 py-1.5 rounded-xl bg-violet-50 text-violet-700 text-xs font-bold border border-violet-100">
+            Chu kỳ #1 (39 câu)
+          </span>
+          <button onclick="openFlaggedDrawer()" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-semibold transition-colors flex items-center gap-1.5">
+            <span>Phân vân</span>
+            <span id="header-flag-count" class="px-1.5 py-0.5 rounded-full bg-amber-500 text-white text-[10px] font-bold">0</span>
+          </button>
+          <button onclick="openHistoryModal()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors">
+            Lịch sử
+          </button>
+          <button onclick="startNewCycle(true)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors">
+            ↻ Chu kỳ mới
+          </button>
+          <button id="btn-submit-exam" onclick="finishCycle()" class="hidden px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-colors">
+            Nộp bài
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress, Error Rate & Question List Drawer Trigger -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm mb-2.5">
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <span class="font-semibold text-slate-700">
+              Tiến độ chu kỳ: <span id="progress-text" class="font-bold text-violet-700">0/39 câu (0%)</span>
+            </span>
+            <span id="live-correct-badge" class="hidden px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+              Đúng: 0
+            </span>
+            <span id="live-wrong-badge" class="hidden px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200">
+              Sai: 0 (0%)
+            </span>
+          </div>
+          <button onclick="openNavigatorDrawer()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100 text-violet-700 text-xs font-semibold transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Bảng danh sách câu hỏi</span>
+          </button>
+        </div>
+        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-gradient-to-r from-violet-600 to-indigo-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Exam Graded Banner -->
+      <div id="exam-review-banner" class="hidden bg-violet-50 border border-violet-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <p class="text-sm font-bold text-violet-950">Đã chấm điểm bài kiểm tra!</p>
+          <p id="exam-review-stats" class="text-xs text-violet-700 mt-0.5"></p>
+        </div>
+        <button onclick="openSummaryModal()" class="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold shrink-0 shadow-xs">
+          Xem bảng tổng kết
+        </button>
+      </div>
+
+      <!-- Carousel Question Card -->
+      <article id="question-card" class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-8 animate-fade-slide">
+        <!-- Meta Row -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="q-position" class="px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold">Câu 1 / 39</span>
+            <span id="q-original-id" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">Q1</span>
+            <span id="q-lo-badge" class="px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 text-xs font-semibold border border-violet-100">LO 9c</span>
+            <span id="q-type-badge" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">Chọn 1 đáp án</span>
+          </div>
+
+          <!-- Flag Button -->
+          <button id="btn-flag" onclick="toggleFlagCurrent()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            <span id="btn-flag-text">Phân vân / Chọn lụi</span>
+          </button>
+        </div>
+
+        <!-- Scenario Context -->
+        <div id="q-context-wrap" class="mb-4 p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Tình huống (Scenario)</p>
+          <p id="q-context" class="text-sm sm:text-[15px] text-slate-700 leading-relaxed whitespace-pre-line"></p>
+        </div>
+
+        <!-- Question Requirement -->
+        <div class="mb-6">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-violet-600 mb-1">Yêu cầu (Requirement)</p>
+          <h2 id="q-text" class="text-base sm:text-lg font-bold text-slate-900 leading-snug whitespace-pre-line"></h2>
+        </div>
+
+        <!-- Options -->
+        <div id="q-options" class="space-y-3"></div>
+
+        <!-- Multi-select Check Button (Practice Mode) -->
+        <div id="multi-check-wrap" class="hidden mt-5">
+          <button onclick="submitMultiPractice()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold shadow-sm transition-colors">
+            Kiểm tra đáp án
+          </button>
+        </div>
+
+        <!-- Explanation Box -->
+        <div id="explanation-box" class="hidden mt-6 p-4 sm:p-5 rounded-2xl border">
+          <div class="flex flex-wrap items-center gap-2 mb-2.5">
+            <span id="exp-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold"></span>
+            <span class="text-xs font-semibold text-slate-500">Giải thích cốt lõi (SOLUTION)</span>
+            <span id="exp-lo-tag" class="ml-auto px-2 py-0.5 rounded-md bg-white/80 text-violet-700 text-[11px] font-bold border border-violet-100"></span>
+          </div>
+          <p id="exp-correct-answer" class="text-xs sm:text-sm font-bold text-slate-900 mb-2"></p>
+          <p id="exp-text" class="text-sm text-slate-700 leading-relaxed"></p>
+        </div>
+
+        <!-- Carousel Prev / Next Footer -->
+        <div class="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between gap-3">
+          <button id="btn-prev" onclick="prevQuestion()" class="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 text-sm font-semibold transition-colors">
+            ← Câu trước
+          </button>
+          <span class="hidden sm:inline text-xs text-slate-400">Phím ← / → để chuyển câu</span>
+          <button id="btn-next" onclick="nextQuestion()" class="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold shadow-sm transition-colors">
+            Câu tiếp →
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ==================== TAB 2: FLASHCARDS ==================== -->
+    <section id="view-flashcards" class="hidden space-y-5">
+      <!-- Flashcard Header & Filters -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <h2 id="fc-heading" class="text-base font-bold text-slate-900">Flashcards trọng tâm — Chapter 9</h2>
+          <p class="text-xs text-slate-500">Chạm vào thẻ hoặc nhấn <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300 text-[10px] font-bold">Space</kbd> để lật 3D</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex bg-slate-100 p-1 rounded-xl">
+            <button id="fc-filter-all" onclick="setFlashcardFilter('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-violet-700 shadow-sm">
+              Tất cả (<span id="fc-total-count">16</span>)
+            </button>
+            <button id="fc-filter-review" onclick="setFlashcardFilter('review')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
+              Cần ôn lại (<span id="fc-review-count">16</span>)
+            </button>
+            <button id="fc-filter-mastered" onclick="setFlashcardFilter('mastered')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
+              Đã nhớ (<span id="fc-mastered-count">0</span>)
+            </button>
+          </div>
+          <button onclick="shuffleFlashcards()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors">
+            ↻ Xáo trộn
+          </button>
+        </div>
+      </div>
+
+      <!-- Mastery Progress Bar -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+        <div class="flex items-center justify-between text-xs sm:text-sm mb-2">
+          <span id="fc-position" class="font-bold text-slate-800">Thẻ 1 / 16</span>
+          <span id="fc-mastered-stats" class="font-bold text-violet-700">Tiến độ đã nhớ: 0 / 16 (0%)</span>
+        </div>
+        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+          <div id="fc-progress-bar" class="h-full bg-gradient-to-r from-violet-600 to-emerald-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- 3D Flip Card -->
+      <div class="perspective-1000 w-full max-w-2xl mx-auto">
+        <div id="fc-card" onclick="flipFlashcard()" class="relative w-full min-h-[320px] sm:min-h-[360px] cursor-pointer transform-style-3d">
+          <!-- Front Face -->
+          <div class="absolute inset-0 backface-hidden bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-10 flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-2">
+              <span id="fc-front-tag" class="px-3 py-1 rounded-full bg-violet-50 text-violet-700 text-xs font-bold border border-violet-100">LO 9a</span>
+              <span id="fc-status-pill" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">Chưa đánh giá</span>
+            </div>
+            <div class="text-center my-auto py-4">
+              <p class="text-[11px] uppercase tracking-widest text-slate-400 font-bold mb-2">Thuật ngữ / Khái niệm</p>
+              <h3 id="fc-front-text" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h3>
+            </div>
+            <p class="text-center text-xs text-slate-400">Chạm vào thẻ để lật xem kiến thức cốt lõi</p>
+          </div>
+
+          <!-- Back Face -->
+          <div class="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-violet-700 to-indigo-700 text-white rounded-3xl shadow-md p-6 sm:p-10 flex flex-col justify-between overflow-y-auto">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold">Kiến thức cốt lõi</span>
+              <span id="fc-back-tag" class="text-xs text-violet-100 font-semibold"></span>
+            </div>
+            <div class="my-auto py-3">
+              <p id="fc-back-text" class="text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line"></p>
+            </div>
+            <p class="text-center text-xs text-violet-200">Chạm để lật lại mặt trước</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashcard Controls -->
+      <div class="max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+        <button onclick="prevFlashcard()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors">
+          ← Thẻ trước
+        </button>
+
+        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-center">
+          <button onclick="markFlashcard('review')" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-sm font-semibold transition-colors">
+            Cần ôn lại
+          </button>
+          <button onclick="markFlashcard('mastered')" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-sm transition-colors">
+            ✓ Đã nhớ
+          </button>
+        </div>
+
+        <button onclick="nextFlashcard()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors">
+          Thẻ tiếp →
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== QUESTION NAVIGATOR MODAL ==================== -->
+  <div id="navigator-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this) closeNavigatorDrawer()">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl animate-fade-slide">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Bảng danh sách câu hỏi</h3>
+          <p id="nav-modal-subtitle" class="text-xs text-slate-500 mt-0.5">Chọn số thứ tự để chuyển nhanh</p>
+        </div>
+        <button onclick="closeNavigatorDrawer()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="px-5 pt-4 flex flex-wrap items-center gap-3 text-xs text-slate-600">
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-200 inline-block"></span> Chưa làm</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span> Đúng</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500 inline-block"></span> Sai</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-violet-500 inline-block"></span> Đã chọn (Thi)</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> Phân vân</span>
+      </div>
+
+      <div class="p-5 overflow-y-auto">
+        <div id="nav-grid" class="grid grid-cols-6 sm:grid-cols-9 gap-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FLAGGED QUESTIONS MODAL ==================== -->
+  <div id="flagged-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this) closeFlaggedDrawer()">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl animate-fade-slide">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between gap-3">
+        <div>
+          <h3 id="flagged-modal-title" class="text-base font-bold text-slate-900">Câu Phân vân / Chọn lụi</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Được lưu bền vững riêng cho từng chương trong trình duyệt</p>
+        </div>
+        <button onclick="closeFlaggedDrawer()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="px-5 pt-4 flex items-center justify-between gap-2">
+        <span id="flagged-modal-count" class="text-xs font-bold text-amber-800">0 câu đã đánh dấu</span>
+        <button id="btn-practice-flagged-modal" onclick="startFlaggedOnlyCycle()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white text-xs font-semibold shadow-xs transition-colors">
+          Luyện riêng câu phân vân
+        </button>
+      </div>
+
+      <div id="flagged-modal-list" class="p-5 overflow-y-auto space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- ==================== CYCLE HISTORY MODAL ==================== -->
+  <div id="history-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this) closeHistoryModal()">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl animate-fade-slide">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <h3 id="history-modal-title" class="text-base font-bold text-slate-900">Lịch sử chu kỳ ôn tập</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Đánh giá tỷ lệ sai của chương qua từng lần ôn tập</p>
+        </div>
+        <button onclick="closeHistoryModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center">✕</button>
+      </div>
+
+      <div id="history-modal-body" class="p-5 overflow-y-auto"></div>
+
+      <div class="p-4 border-t border-slate-100 flex items-center justify-between">
+        <div id="reset-confirm-area">
+          <button onclick="showResetConfirm()" class="text-xs font-semibold text-rose-600 hover:text-rose-800 underline">
+            Đặt lại dữ liệu chương này
+          </button>
+        </div>
+        <button onclick="closeHistoryModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== END-OF-CYCLE SUMMARY MODAL ==================== -->
+  <div id="summary-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4" onclick="if(event.target===this) closeSummaryModal()">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-7 shadow-xl animate-fade-slide">
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center text-2xl font-extrabold mb-3">
+          ✓
+        </div>
+        <h3 class="text-xl font-extrabold text-slate-900">Tổng kết chu kỳ</h3>
+        <p id="modal-cycle-subtitle" class="text-xs text-slate-500 mt-1"></p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-100 text-center">
+          <p class="text-xs text-emerald-700 font-medium">Điểm / Tỷ lệ đúng</p>
+          <p id="modal-correct" class="text-xl font-extrabold text-emerald-700 mt-0.5">0/0 (0%)</p>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-100 text-center">
+          <p class="text-xs text-rose-700 font-medium">Tỷ lệ sai</p>
+          <p id="modal-error-rate" class="text-2xl font-extrabold text-rose-600 mt-0.5">0%</p>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+          <p class="text-xs text-slate-600 font-medium">Số câu sai</p>
+          <p id="modal-wrong" class="text-xl font-bold text-slate-800 mt-0.5">0</p>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-100 text-center">
+          <p class="text-xs text-amber-700 font-medium">Phân vân / Chọn lụi</p>
+          <p id="modal-flagged" class="text-xl font-bold text-amber-700 mt-0.5">0</p>
+        </div>
+      </div>
+
+      <!-- Recent History Mini-Table -->
+      <div id="modal-history-preview" class="mb-5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70"></div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2.5">
+        <button id="modal-btn-new-cycle" onclick="startNewCycle(true)" class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold shadow-sm transition-colors">
+          Bắt đầu chu kỳ mới (Xáo trộn)
+        </button>
+        <button id="modal-btn-wrong" onclick="startWrongOnlyCycle()" class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold shadow-sm transition-colors">
+          Luyện riêng câu sai
+        </button>
+        <button id="modal-btn-flagged" onclick="startFlaggedOnlyCycle()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold shadow-sm transition-colors">
+          Luyện riêng câu phân vân / chọn lụi
+        </button>
+        <button onclick="closeSummaryModal()" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
+          Đóng & xem lại từng câu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs sm:text-sm font-medium px-4 py-3 rounded-xl shadow-lg"></div>
+
+  <script>
+    // =========================================================================
+    // 1. CHAPTER METADATA & STORAGE PREFIXES
+    // =========================================================================
+    const CHAPTER_META = {
+      c9: {
+        badge: "C9",
+        title: "Chapter 9: Threats and safeguards",
+        short: "Chapter 9",
+        subtitle: "ICAEW Code of Ethics • 39 mục câu hỏi & 16 Flashcards",
+        prefix: "icaew_c9_"
+      },
+      c10: {
+        badge: "C10",
+        title: "Chapter 10: Technology, data and ethics",
+        short: "Chapter 10",
+        subtitle: "ICAEW Sustainability & Ethics • 42 mục câu hỏi & 16 Flashcards",
+        prefix: "icaew_c10_"
+      }
+    };
+
+    // =========================================================================
+    // 2. COMPLETE VERIFIED QUESTIONS — CHAPTER 9 (39 ITEMS) & CHAPTER 10 (42 ITEMS)
+    // =========================================================================
+    const CHAPTER_QUESTIONS = {
+      c9: [
+        {
+          id: "Q1", type: "single", lo: "LO 9c",
+          context: "Sana works for SST Accounting Ltd (SST) and is currently part of a team that is performing the external audit for a client company, Ressol SA (Ressol). Sana discovers that her sister, Zainab, recently invested a significant amount of money into Ressol and is now a member of the board of directors.",
+          question: "Which of the following actions should Sana take to ensure compliance with the ICAEW fundamental ethical principle of objectivity?",
+          options: [
+            { key: "A", text: "Continue with the audit but ensure her work is reviewed by a colleague" },
+            { key: "B", text: "Disclose the relationship to SST and remove herself from the audit team for Ressol" },
+            { key: "C", text: "Avoid any direct interaction with her sister during the audit" },
+            { key: "D", text: "Perform the audit role as usual but document the relationship in her audit working papers" }
+          ],
+          correct: ["B"],
+          explanation: "By Sana disclosing the relationship to SST and removing herself from the audit team for Ressol, her objectivity is not impaired and any potential conflicts of interest are appropriately managed. The other options do not fully mitigate the risk of bias or the appearance of a conflict of interest."
+        },
+        {
+          id: "Q2", type: "single", lo: "LO 9a",
+          context: "Chike, a senior auditor with Agus & Co (Agus), is auditing the financial statements of Amerzan Ltd (Amerzan), a major client of Agus. During the audit, Chike uncovers significant financial discrepancies that suggest potential fraud. When he brings this to the attention of Amerzan's finance director, he is explicitly told to ignore the discrepancies and finalise the audit report as it is, or else Amerzan will terminate its contract with Agus.",
+          question: "What type of ethical threat does Chike face?",
+          options: [
+            { key: "A", text: "Intimidation threat" },
+            { key: "B", text: "Self-interest threat" },
+            { key: "C", text: "Familiarity threat" },
+            { key: "D", text: "Advocacy threat" }
+          ],
+          correct: ["A"],
+          explanation: "In this scenario, Chike faces an intimidation threat as he is being pressured by the finance director (FD) of Amerzan to ignore financial discrepancies in order to secure the audit contract. This threat compromises Chike's professional judgement and integrity. According to the ICAEW Code of Ethics, professional accountants must identify, evaluate, and respond to such threats using professional judgement and the reasonable and informed third-party test."
+        },
+        {
+          id: "Q3", type: "single", lo: "LO 9a",
+          context: "During a financial audit of Bloub Ltd (Bloub), Clara, a trainee auditor, is approached by the marketing director of Bloub. The director offers Clara tickets to an exclusive concert and hints that a positive audit report would guarantee more such benefits in the future.",
+          question: "Which ethical threat does Clara face?",
+          options: [
+            { key: "A", text: "Intimidation threat" },
+            { key: "B", text: "Self-interest threat" },
+            { key: "C", text: "Familiarity threat" },
+            { key: "D", text: "Advocacy threat" }
+          ],
+          correct: ["B"],
+          explanation: "In this scenario, Clara is being offered a personal benefit (concert tickets) by the marketing director of Bloub, which could compromise Clara's objectivity and create a self-interest threat. According to the ICAEW Code of Ethics, professional accountants must remain independent and not be influenced by personal gain. Clara should appropriately report and decline the offer to maintain ethical standards."
+        },
+        {
+          id: "Q4", type: "single", lo: "LO 9d",
+          context: "Nadia has been the finance assistant of Piobar BV (Piobar) for the past two years. She completed her accountancy training whilst working for an accountancy services firm. She is therefore aware that threats to the fundamental principles can arise from different scenarios for accountants working in business and those working in practice.",
+          question: "Which of the following situations is likely to give rise to an advocacy threat for a professional accountant working in business rather than one working in public practice?",
+          options: [
+            { key: "A", text: "Advocating for a client in a legal proceeding" },
+            { key: "B", text: "Promoting the shares of a client" },
+            { key: "C", text: "Lobbying the government in favour of laws on behalf of a client" },
+            { key: "D", text: "Manipulating information in a financial report given to a lender" }
+          ],
+          correct: ["D"],
+          explanation: "A professional accountant having the opportunity to manipulate information in a financial report in order to obtain favourable financing is a scenario that could be faced by an accountant working in business. The other options are incorrect as they are situations where the accountant is advocating for a client and as such could be faced by accountants working in practice."
+        },
+        {
+          id: "Q5", type: "single", lo: "LO 9c",
+          context: "Usha, the senior accountant at GAD Accounting Ltd (GAD), has been asked by a senior manager of her long-standing client, Deciette BV (Deciette), to approve an expense report that contains questionable items. The senior manager at Deciette hints that approving these expenses could result in more business opportunities for GAD in the future.",
+          question: "According to the ICAEW Code of Ethics, which action should the senior accountant take to maintain objectivity?",
+          options: [
+            { key: "A", text: "The senior accountant should approve the expense report to maintain the client relationship and secure future business" },
+            { key: "B", text: "The senior accountant should ask another colleague to approve the expense report to avoid being directly involved" },
+            { key: "C", text: "The senior accountant should approve only the items that seem valid to avoid fully rejecting the report" },
+            { key: "D", text: "The senior accountant should decline to approve the expense report and discuss her concerns with the Deciette board" }
+          ],
+          correct: ["D"],
+          explanation: "The principle of objectivity requires the senior accountant to remain impartial and not allow bias or undue influence to compromise her professional judgement. Approving the expenses for future business opportunities would compromise her objectivity. Discussing her concerns with the Deciette board ensures transparency and adherence to ethical standards."
+        },
+        {
+          id: "Q6", type: "single", lo: "LO 9a",
+          context: "Manjit, a professional accountant at ABI LLP (ABI), has been tasked with designing a new internal control system for a client, Blastan Ltd (Blastan). After completing the design, Manjit is later asked to evaluate the effectiveness of the same internal control system.",
+          question: "Which ethical threat is present in this scenario?",
+          options: [
+            { key: "A", text: "Intimidation threat" },
+            { key: "B", text: "Self-review threat" },
+            { key: "C", text: "Familiarity threat" },
+            { key: "D", text: "Self-interest threat" }
+          ],
+          correct: ["B"],
+          explanation: "Since Manjit is evaluating the internal control system she designed, her objectivity may be compromised, as she may be less willing to identify flaws or shortcomings in her own work (B). An intimidation threat (A) involves feeling pressured by others, a familiarity threat (C) involves being too close to the client, and a self-interest threat (D) involves financial or personal gain."
+        },
+        {
+          id: "Q7", type: "single", lo: "LO 9a",
+          context: "Professional accountants must recognise the five categories of threats to compliance with the fundamental principles.",
+          question: "Which of the following scenarios represents a familiarity threat?",
+          options: [
+            { key: "A", text: "An accountant is offered a significant bonus if they help their company meet certain financial targets" },
+            { key: "B", text: "An accountant is responsible for inspecting and approving their own previous financial reports" },
+            { key: "C", text: "An accountant promotes a client's business in which they have invested" },
+            { key: "D", text: "An accountant has a long-standing friendship with a key member of a client's management team" }
+          ],
+          correct: ["D"],
+          explanation: "The accountant's relationship with the client's management results in a familiarity threat (D). A bonus gives rise to a self-interest threat (A), approval of own work is a self-review threat (B), and promotion of a client (C) is an advocacy threat."
+        },
+        {
+          id: "Q8", type: "single", lo: "LO 9c",
+          context: "Angus, a professional accountant, has been auditing the financial statements of Coold Ltd (Coold) for the past nine years. Over this period, Angus has established a close working relationship with several members of Coold's senior management, frequently receiving invitations to private dinners and company events.",
+          question: "What action could Angus's firm take to best mitigate the familiarity threat?",
+          options: [
+            { key: "A", text: "Rotate Angus off the Coold audit engagement" },
+            { key: "B", text: "Implement a policy limiting non-work-related interactions with clients" },
+            { key: "C", text: "Have another accountant review Angus's audit work" },
+            { key: "D", text: "Require Angus to attend ethics training" }
+          ],
+          correct: ["A"],
+          explanation: "A familiarity threat arises when an auditor becomes too close to the client, impairing their objectivity. The long-term working relationship and frequent social interactions with Coold's senior management have led to a familiarity threat. Rotating Angus off the audit engagement provides a fresh perspective and reduces undue influence from long-standing relationships (A)."
+        },
+        {
+          id: "Q9", type: "single", lo: "LO 9c",
+          context: "Yolanda, the senior accountant at a mid-sized accounting firm, has a client that requests an analysis of the impact of recently introduced environmental regulations on its operations. Yolanda has not kept up to date with changes in environmental regulation as it relates to accounting.",
+          question: "What should Yolanda do in line with the fundamental ethical principle of professional competence and due care?",
+          options: [
+            { key: "A", text: "Proceed with the analysis based on existing knowledge and experience as she knows the environment is important" },
+            { key: "B", text: "Undertake relevant training on the new regulations before providing the analysis to the client" },
+            { key: "C", text: "Delegate the task to a junior accountant in the team as they keep talking about recycling" },
+            { key: "D", text: "Consult with a colleague who might have knowledge of the new regulations but still provide the analysis on her own" }
+          ],
+          correct: ["B"],
+          explanation: "Professional competence and due care require Yolanda to ensure she is up to date with current regulations and practices relevant to the services she provides. By undertaking relevant training, Yolanda ensures she has the necessary knowledge and skills to provide a competent analysis."
+        },
+        {
+          id: "Q10", type: "single", lo: "LO 9e",
+          context: "Zeke, a senior accountant at Lobo SpA (Lobo), is instructed by his immediate superior to manipulate the financial statements to present a more favourable liquidity position ahead of an important meeting with potential investors. Zeke is told his performance evaluation and potential promotion depend on complying with this request.",
+          question: "What should Zeke do according to the ICAEW Code of Ethics?",
+          options: [
+            { key: "A", text: "Zeke should comply with the instruction to ensure a positive performance evaluation and promotion" },
+            { key: "B", text: "Zeke should comply with the instruction but keep detailed notes of the adjustments made for future reference" },
+            { key: "C", text: "Zeke should comply with the instruction but inform the potential investors of the true situation separately to maintain transparency" },
+            { key: "D", text: "Zeke should refuse to comply with the instruction, document the pressure exerted and seek guidance from those charged with governance" }
+          ],
+          correct: ["D"],
+          explanation: "According to the ICAEW Code of Ethics, Zeke should uphold the principles of integrity and objectivity by refusing to act unethically. Documenting the pressure maintains transparency and provides evidence of unethical behaviour, protecting Zeke from future repercussions. Seeking guidance helps ensure the issue is handled appropriately."
+        },
+        {
+          id: "Q11", type: "single", lo: "LO 9a, 9c",
+          context: "Gurpreet, an accountant, is offered an expensive electronic gadget by one of their long-term clients, Tra 1 Ltd (Tra 1), as a token of appreciation for the excellent financial advisory services they have provided over the years.",
+          question: "What is the most appropriate safeguard for Gurpreet to take according to the ICAEW Code of Ethics?",
+          options: [
+            { key: "A", text: "Decline the gift and explain to Tra 1 that accepting it could create a self-interest threat" },
+            { key: "B", text: "Accept the gift but disclose it to their manager to ensure transparency" },
+            { key: "C", text: "Accept the gift and make a note of it in their records for future reference" },
+            { key: "D", text: "Accept the gift but refrain from any future advisory services for Tra 1" }
+          ],
+          correct: ["A"],
+          explanation: "According to the ICAEW Code of Ethics, accepting such gifts, especially if not considered trivial or inconsequential, may compromise Gurpreet's objectivity and independence. Declining the gift and explaining the reason demonstrates adherence to ethical principles and helps maintain professional integrity."
+        },
+        {
+          id: "Q12", type: "single", lo: "LO 9c",
+          context: "Candice, a professional accountant, has been asked to take on a complex financial task that she has limited experience with. She is concerned about adhering to the principle of professional competence and due care.",
+          question: "Which of the following safeguards would help Candice comply with this principle?",
+          options: [
+            { key: "A", text: "Declining the task without seeking further advice" },
+            { key: "B", text: "Consulting a colleague with more experience in this area" },
+            { key: "C", text: "Postponing the task until she gains more experience, even if that is after the client deadline" },
+            { key: "D", text: "Documenting her limited experience but continuing with the task" }
+          ],
+          correct: ["B"],
+          explanation: "Consulting a more experienced colleague (B) ensures that Candice receives appropriate guidance and support, helping her to maintain professional competence and due care. Merely documenting her limited experience (D) or declining without advice (A) does not effectively address compliance, and postponing past the client deadline (C) is impractical."
+        },
+        {
+          id: "Q13a", type: "single", lo: "LO 9a",
+          context: "Violety LLP (Violety), an accounting firm, has had BurtRed Ltd (BurtRed) and Pegrip plc (Pegrip) as clients for over 10 years.\n\nScenario 1: The senior auditor at Violety regularly attends quarterly meetings and annual retreats with BurtRed's management team. Over the years, the senior auditor has developed close personal relationships with several members of BurtRed's executive team.",
+          question: "Identify which type of threat to compliance with the fundamental principles arises from this scenario.",
+          options: [
+            { key: "A", text: "Self-interest threat" },
+            { key: "B", text: "Self-review threat" },
+            { key: "C", text: "Familiarity threat" }
+          ],
+          correct: ["C"],
+          explanation: "Familiarity threat arises when an auditor or accountant becomes too close to the client, impairing their objectivity. The senior auditor's close personal relationships with BurtRed's management over ten years lead to a familiarity threat."
+        },
+        {
+          id: "Q13b", type: "single", lo: "LO 9a",
+          context: "Violety LLP (Violety), an accounting firm, has had BurtRed Ltd (BurtRed) and Pegrip plc (Pegrip) as clients for over 10 years.\n\nScenario 2: The new audit trainee assigned to work on the audit of Pegrip holds shares in the company.",
+          question: "Identify which type of threat to compliance with the fundamental principles arises from this scenario.",
+          options: [
+            { key: "D", text: "Self-interest threat" },
+            { key: "E", text: "Self-review threat" },
+            { key: "F", text: "Familiarity threat" }
+          ],
+          correct: ["D"],
+          explanation: "Holding shares in an audit client is a self-interest threat as there is a risk that holding the shares will inappropriately influence the auditor's judgement or behaviour."
+        },
+        {
+          id: "Q14a", type: "single", lo: "LO 9c",
+          context: "Karishma is the senior accountant at a mid-sized company. Recently, she has been feeling pressured by management to overlook certain discrepancies in financial reports to present a more favourable financial position of the company.",
+          question: "Identify whether the following is an appropriate safeguard to reduce the ethical threat faced by Karishma:\n\"Involving an additional professional accountant to review the financial reports prepared by Karishma.\"",
+          options: [
+            { key: "A", text: "Appropriate safeguard" },
+            { key: "B", text: "Inappropriate safeguard" }
+          ],
+          correct: ["A"],
+          explanation: "Involving an additional professional accountant to review Karishma's work helps ensure objectivity and thoroughness in reviewing the financial reports."
+        },
+        {
+          id: "Q14b", type: "single", lo: "LO 9c",
+          context: "Karishma is the senior accountant at a mid-sized company. Recently, she has been feeling pressured by management to overlook certain discrepancies in financial reports to present a more favourable financial position of the company.",
+          question: "Identify whether the following is an appropriate safeguard to reduce the ethical threat faced by Karishma:\n\"Ensuring Karishma has adequate time to complete the financial reports.\"",
+          options: [
+            { key: "C", text: "Appropriate safeguard" },
+            { key: "D", text: "Inappropriate safeguard" }
+          ],
+          correct: ["D"],
+          explanation: "Giving sufficient time to complete the financial reports would not stop management pressuring her to overlook discrepancies. This safeguard could be used to mitigate threats to compliance with the principle of professional competence and due care."
+        },
+        {
+          id: "Q15a", type: "single", lo: "LO 9c",
+          context: "Charlie works for a financial services company. They have been asked to join a committee responsible for evaluating investment opportunities. Charlie is aware that their brother is a director at one of the companies being evaluated.",
+          question: "Identify if the following is an appropriate safeguard to reduce the ethical threat faced by Charlie:\n\"Disclosing their brother's involvement to the committee and proceeding with full participation.\"",
+          options: [
+            { key: "A", text: "Appropriate safeguard" },
+            { key: "B", text: "Inappropriate safeguard" }
+          ],
+          correct: ["B"],
+          explanation: "Disclosing their brother's involvement ensures transparency, but it is unlikely that Charlie will be able to remain objective when evaluating their brother's company."
+        },
+        {
+          id: "Q15b", type: "single", lo: "LO 9c",
+          context: "Charlie works for a financial services company. They have been asked to join a committee responsible for evaluating investment opportunities. Charlie is aware that their brother is a director at one of the companies being evaluated.",
+          question: "Identify if the following is an appropriate safeguard to reduce the ethical threat faced by Charlie:\n\"Removing themselves from any discussions or decisions involving the company their brother is affiliated with.\"",
+          options: [
+            { key: "C", text: "Appropriate safeguard" },
+            { key: "D", text: "Inappropriate safeguard" }
+          ],
+          correct: ["C"],
+          explanation: "Removing themselves from discussions and decisions involving their brother's company helps maintain their objectivity, so this is an appropriate safeguard."
+        },
+        {
+          id: "Q16", type: "single", lo: "LO 9e",
+          context: "Laura, a professional accountant at Junipal Ltd (Junipal), is responsible for preparing the company's financial statements. Recently, the supervisor has been putting constant pressure on Laura to inflate revenue figures to make Junipal look more profitable. Laura is concerned that complying with this request would breach ethical standards.",
+          question: "What safeguard should Laura implement to address the pressure to breach the ICAEW Code of Ethics?",
+          options: [
+            { key: "A", text: "Ignore the supervisor's request and prepare the financial statements accurately without any interference" },
+            { key: "B", text: "Ask a colleague to take over the preparation of the financial statements to avoid dealing with the pressure" },
+            { key: "C", text: "Discuss the ethical issue with those charged with governance of the organisation" },
+            { key: "D", text: "Comply with the supervisor's request to avoid potential conflicts and maintain the relationship" }
+          ],
+          correct: ["C"],
+          explanation: "Discussing the issue with those charged with governance (C) ensures transparency and allows the organisation to take appropriate actions to mitigate the threat. Complying (D) or ignoring it (A) does not address the underlying issue, and asking a colleague to take over (B) evades responsibility."
+        },
+        {
+          id: "Q17", type: "single", lo: "LO 9a",
+          context: "Desmond is a professional accountant working for a large manufacturing company.",
+          question: "Which of the following situations could give rise to a self-interest threat for Desmond?",
+          options: [
+            { key: "A", text: "Over time, he has developed close personal relationships with the company's senior management team" },
+            { key: "B", text: "Desmond has been offered a substantial bonus if the company meets its profit targets for the year" },
+            { key: "C", text: "Desmond has been asked to review financial statements prepared by his team, which includes significant judgements previously made by him" },
+            { key: "D", text: "His line manager has insisted that Desmond should change some figures in a financial report to show the company in a favourable light" }
+          ],
+          correct: ["B"],
+          explanation: "Desmond's potential to receive a substantial bonus based on the company meeting its profit targets may compromise his objectivity and is a self-interest threat (B). Close personal relationships (A) = familiarity threat; reviewing his own judgements (C) = self-review threat; line manager's insistence (D) = intimidation threat."
+        },
+        {
+          id: "Q18", type: "single", lo: "LO 9f",
+          context: "Bhupinder, who works at a mid-sized accounting firm, has recently overheard a conversation suggesting that a major client, Allbank Ltd (Allbank), is engaged in activities that are not compliant with environmental regulations. Bhupinder is unsure how to handle the situation, considering Allbank is crucial to the firm's revenue.",
+          question: "What should be Bhupinder's first step after becoming aware of this issue?",
+          options: [
+            { key: "A", text: "Bhupinder should report this immediately via the firm's whistleblowing helpline" },
+            { key: "B", text: "Bhupinder should report the issue directly to the regulatory authorities without informing their firm" },
+            { key: "C", text: "Bhupinder should confront the management of Allbank directly and demand immediate cessation of the activities" },
+            { key: "D", text: "Bhupinder should establish the facts before reporting the issue" }
+          ],
+          correct: ["D"],
+          explanation: "It is crucial to understand the nature of the matter and establish the facts before disclosing any wrongdoing. Whilst Bhupinder could report this issue to the firm's whistleblowing hotline or to the regulatory authorities, they should not do so until they have first confirmed the facts. Confronting the client directly is also not a suitable first step."
+        },
+        {
+          id: "Q19", type: "single", lo: "LO 9b",
+          context: "Leah is an auditor at Caora & Uan LLP (Caora & Uan), a firm that provides audit services to Barrach Ltd (Barrach). Recently, Barrach's finance director invited Leah to a luxury weekend getaway, all expenses paid, as a token of appreciation for her excellent work.",
+          question: "According to the conceptual framework, should Leah accept this invitation?",
+          options: [
+            { key: "A", text: "No, Leah should decline the offer because a reasonable and informed third party would judge that the threat could not be reduced to an acceptable level" },
+            { key: "B", text: "No, Leah should decline the offer because a reasonable and informed third party would judge that the threat is already at an acceptable level" },
+            { key: "C", text: "Yes, Leah should accept the offer because a reasonable and informed third party would judge that the threat could not be reduced to an acceptable level" },
+            { key: "D", text: "Yes, Leah should accept the offer because a reasonable and informed third party would judge that the threat is already at an acceptable level" }
+          ],
+          correct: ["A"],
+          explanation: "According to the conceptual framework, Leah should identify, evaluate, and respond to the threat. A reasonable and informed third party is likely to perceive this invitation as an attempt to influence professional judgement and creates a self-interest threat that is not at an acceptable level. It is neither trivial nor inconsequential and adequate safeguards cannot mitigate it, so Leah should decline."
+        },
+        {
+          id: "Q20", type: "single", lo: "LO 9b",
+          context: "The ICAEW conceptual framework requires accountants to apply the 'reasonable and informed third-party test' when evaluating ethical threats.",
+          question: "Which of the following accurately describes the reasonable and informed third-party test?",
+          options: [
+            { key: "A", text: "Whether the same conclusions would likely be reached by another accountant at the same company or firm" },
+            { key: "B", text: "Whether the same conclusions would definitely be reached by a reasonable and informed third party with access to all the relevant facts" },
+            { key: "C", text: "Whether the same conclusions would likely be reached by a reasonable and informed third party with access to all the relevant facts" },
+            { key: "D", text: "Whether the professional accountant is acting reasonably and is fully informed" }
+          ],
+          correct: ["C"],
+          explanation: "The reasonable and informed third-party test is a consideration by the professional accountant about whether the same conclusions would likely be reached by another party, made from the perspective of a reasonable and informed third party who has access to all relevant facts and circumstances. The third party does not need to be an accountant, and 'likely' is used rather than 'definitely'."
+        },
+        {
+          id: "Q21", type: "single", lo: "LO 9d",
+          context: "Threats relevant to accountants working in business may differ from threats relevant to accountants working in public practice.",
+          question: "Which of the following scenarios would be considered a familiarity threat for a professional accountant working in business?",
+          options: [
+            { key: "A", text: "Having worked on the same audit client for five years" },
+            { key: "B", text: "Having worked closely with the directors of their company for several years" },
+            { key: "C", text: "Being appointed as a director of Gurat Ltd, that they were previously the audit partner of" },
+            { key: "D", text: "Having a sister that is a director of an assurance client" }
+          ],
+          correct: ["B"],
+          explanation: "All the options are examples of familiarity threats, but only option B is one that would be encountered by an accountant working in business, as the others relate to familiarity with audit/assurance clients."
+        },
+        {
+          id: "Q22", type: "single", lo: "LO 9a",
+          context: "Frankie, the accountant at a construction company, is preparing the annual financial statements.",
+          question: "Which of the following ethical issues leads to an intimidation threat for Frankie?",
+          options: [
+            { key: "A", text: "Frankie recently accepted a significant personal loan from the company at a favourable interest rate" },
+            { key: "B", text: "The finance director is a close friend of Frankie and they have regularly played tennis together for several years" },
+            { key: "C", text: "The finance director insists that Frankie should inflate revenue figures to attract potential investors" },
+            { key: "D", text: "Frankie was heavily involved in a significant acquisition one year ago and has now been asked to prepare a report on the success of the acquisition" }
+          ],
+          correct: ["C"],
+          explanation: "The insistence from the finance director to manipulate the financial statements is an intimidation threat (C). A favourable loan (A) = self-interest threat; close friendship (B) = familiarity threat; reporting on an acquisition Frankie helped implement (D) = self-review threat."
+        },
+        {
+          id: "Q23", type: "single", lo: "LO 9b",
+          context: "Aleena, an accountant, has been assigned as an external auditor for Kooli plc (Kooli). During the audit, it comes to light that Aleena's spouse has recently purchased a significant number of shares in Kooli. The value of these shares could be significantly affected by the audit findings.",
+          question: "How should Aleena evaluate this self-interest threat according to the conceptual framework?",
+          options: [
+            { key: "A", text: "The threat is already at an acceptable level, so Aleena should continue with the audit as she has no interest in the shares herself" },
+            { key: "B", text: "The threat level is not currently acceptable, but selling her spouse's shares immediately would be an adequate safeguard to allow Aleena to proceed with the audit" },
+            { key: "C", text: "The threat level is not currently acceptable, but Aleena can proceed with the audit if there is another accountant at her firm assigned as an appropriate reviewer" },
+            { key: "D", text: "The threat level cannot be reduced with safeguards so Aleena should withdraw from the audit engagement" }
+          ],
+          correct: ["D"],
+          explanation: "Aleena can only proceed if the self-interest threat is reduced to an acceptable level. Because her spouse holds a significant shareholding in Kooli and Aleena has direct influence on the audit outcome, the threat cannot be reduced with safeguards and the only way to maintain objectivity and independence is to withdraw from the audit engagement."
+        },
+        {
+          id: "Q24", type: "single", lo: "LO 9e",
+          context: "Three professional accountants have encountered the following scenarios:\n(1) A superior has asked Radhika to alter the financial statements to secure a crucial bank loan. Failing to do so could result in job losses.\n(2) Wendy, a financial controller, will receive a bonus if the company meets its performance targets.\n(3) Tao, a trainee accountant, is required to prepare a complex financial report in a very short time.",
+          question: "Which of these scenarios could pressure the professional accountant to breach the ICAEW Code of Ethics?",
+          options: [
+            { key: "A", text: "(1) only" },
+            { key: "B", text: "(1) and (2)" },
+            { key: "C", text: "(1) and (3)" },
+            { key: "D", text: "All the scenarios" }
+          ],
+          correct: ["D"],
+          explanation: "Pressure to breach the ICAEW Code of Ethics can take various forms, including internal sources, external influences, and targets/expectations. Radhika faces undue pressure from a supervisor, Wendy faces performance-related bonus pressure, and Tao faces an unrealistic timeline that could lead to poor quality work and ethical breaches."
+        },
+        {
+          id: "Q25", type: "single", lo: "LO 9f",
+          context: "Yves, a professional accountant, discovers that his company's financial records have been manipulated to hide substantial losses. He suspects that his immediate superior is responsible for the manipulation. The company does not have a whistleblowing policy, and Yves is concerned about the implications of reporting.",
+          question: "What course of action should Yves take in response to his discovery?",
+          options: [
+            { key: "A", text: "Directly confront his immediate superior and demand an explanation" },
+            { key: "B", text: "Immediately report the issue to the relevant law enforcement agency" },
+            { key: "C", text: "Seek advice from an independent third party, such as a lawyer or ICAEW, on how to proceed" },
+            { key: "D", text: "Ignore the issue as there is no internal whistleblowing policy in place" }
+          ],
+          correct: ["C"],
+          explanation: "Yves should seek independent advice (such as from a lawyer or ICAEW) to understand his options and the implications of each course of action (C). Confronting his superior directly (A) puts him at risk; reporting immediately to law enforcement without consultation (B) may cause unintended consequences; ignoring (D) is unethical."
+        },
+        {
+          id: "Q26", type: "multi", selectCount: 2, lo: "LO 9f",
+          context: "Abdul, a finance manager, uncovers evidence that senior management at his company has been manipulating the financial statements to mislead investors. Following company protocol, Abdul reports the findings through the internal whistleblowing system.",
+          question: "Which two of the following are adverse consequences Abdul could experience due to his whistleblowing?",
+          options: [
+            { key: "A", text: "The senior management team are replaced" },
+            { key: "B", text: "The company removes the whistleblowing system" },
+            { key: "C", text: "Lack of promotion despite good performance" },
+            { key: "D", text: "A breakdown of his workplace relationships" },
+            { key: "E", text: "Praise from his employer" }
+          ],
+          correct: ["C", "D"],
+          explanation: "Despite laws protecting whistleblowers, Abdul could face subtle retribution, including being overlooked for promotions (C) and a breakdown of workplace relationships (D). Praise from his employer (E) would be positive, and replacing senior management (A) is not experienced by Abdul."
+        },
+        {
+          id: "Q27", type: "single", lo: "LO 9f",
+          context: "Recently Zoltan, a professional accountant working for Sporsail Ltd (Sporsail), discovered that a colleague has been submitting false expense claims. Although Zoltan wants to report the issue, they fear retaliation and possible dismissal. Sporsail has a whistleblowing policy in place.",
+          question: "What protection and support should Sporsail's whistleblowing policy offer to Zoltan to encourage them to report the issue ethically?",
+          options: [
+            { key: "A", text: "Assurance that Zoltan will not face retaliation, along with access to support resources such as counselling and legal advice" },
+            { key: "B", text: "A financial reward for bringing up such significant issues" },
+            { key: "C", text: "Immediate suspension of the colleague involved in the wrongdoing" },
+            { key: "D", text: "A private meeting with Sporsail's chief executive to discuss the issue directly" }
+          ],
+          correct: ["A"],
+          explanation: "A robust whistleblowing policy should assure employees that they will not face retaliation, harassment, or discrimination for reporting concerns in good faith, and provide support mechanisms such as counselling and legal advice (A)."
+        },
+        {
+          id: "Q28a", type: "single", lo: "LO 9f",
+          context: "Whistleblowing, the act of raising concerns about wrongdoing, can result in various consequences for the whistleblower.\n\nScenario 1: Jillian, an accountant, reports illegal dumping practices by her firm to the environmental authorities. As a result, the firm is fined and made to clean up the dumping site. Jillian's concerns were proven correct.",
+          question: "Identify the consequence that Jillian is likely to experience.",
+          options: [
+            { key: "A", text: "Jillian receives praise from environmental groups" },
+            { key: "B", text: "Jillian is promoted within the firm" },
+            { key: "C", text: "Jillian is given a significant bonus for her actions" }
+          ],
+          correct: ["A"],
+          explanation: "Jillian's actions led to positive environmental outcomes and thus she would likely receive praise from environmental groups. However, she may face hostility within her firm and is unlikely to be promoted or given a bonus."
+        },
+        {
+          id: "Q28b", type: "single", lo: "LO 9f",
+          context: "Whistleblowing, the act of raising concerns about wrongdoing, can result in various consequences for the whistleblower.\n\nScenario 2: Noah, an internal auditor, blows the whistle on a colleague Glenda, who was stealing funds. This action leads to an official investigation and Glenda's dismissal. Noah has acted in line with their company's whistleblowing policy but has upset some colleagues who were friends with Glenda.",
+          question: "Identify the consequence that Noah is likely to experience.",
+          options: [
+            { key: "D", text: "Noah is given a paid leave of absence" },
+            { key: "E", text: "Noah suffers reputational damage and is seen as a troublemaker" },
+            { key: "F", text: "Noah gets a significant pay increase" }
+          ],
+          correct: ["E"],
+          explanation: "Noah, despite acting correctly, could experience reputational damage and be seen as a troublemaker within the workplace. It is unlikely that he will be offered a pay increase or a paid leave of absence."
+        },
+        {
+          id: "Q29", type: "single", lo: "LO 9b",
+          context: "Theo, a professional accountant, has been asked by his employer to testify in favour of the company's environmental compliance practices in an ongoing investigation by regulatory authorities. While Theo believes in the company's practices, he also recognises there has been some recent non-compliance that has not been publicly disclosed.",
+          question: "What does the conceptual framework require Theo to do in this situation?",
+          options: [
+            { key: "A", text: "Notice threats to the fundamental principles, assess the threats and then apply safeguards" },
+            { key: "B", text: "Identify threats to the fundamental principles, assess them and then apply safeguards" },
+            { key: "C", text: "Notice threats to the fundamental principles and address threats identified" },
+            { key: "D", text: "Identify threats to the fundamental principles, evaluate threats identified and address the threats" }
+          ],
+          correct: ["D"],
+          explanation: "The conceptual framework requires professional accountants to identify threats to the fundamental principles, evaluate the threats identified, and address the threats by eliminating or reducing them to an acceptable level (which can involve declining or stopping the activity if safeguards cannot reduce them)."
+        },
+        {
+          id: "Q30", type: "single", lo: "LO 9c",
+          context: "Alex, a senior accountant, has been asked to perform the final review on complex financial statements that they have previously prepared. Alex realises that their objectivity might be compromised, as they may not critically assess their own work.",
+          question: "Which safeguard would address Alex's self-review threat in this situation?",
+          options: [
+            { key: "A", text: "Delay the review so there has been a gap between performing and reviewing the work" },
+            { key: "B", text: "Engage an independent accountant to review the financial statements" },
+            { key: "C", text: "Alex should complete additional training on critical review practices" },
+            { key: "D", text: "Alex's workload should be reduced so they can focus better on the review process" }
+          ],
+          correct: ["B"],
+          explanation: "Engaging an independent accountant (B) provides an unbiased perspective and ensures that the review is thorough and objective. Delaying the review (A), additional training (C), or reducing workload (D) do not directly address the self-review threat."
+        },
+        {
+          id: "Q31", type: "multi", selectCount: 2, lo: "LO 9a",
+          context: "Ali is an accountant at an audit firm that provides audit services to Zaral SA (Zaral). Recently, Ali has been offered a substantial fee to represent Zaral in a legal dispute with one of its suppliers.",
+          question: "Which two threats does this situation present for Ali?",
+          options: [
+            { key: "A", text: "Self-review" },
+            { key: "B", text: "Self-interest" },
+            { key: "C", text: "Advocacy" },
+            { key: "D", text: "Intimidation" },
+            { key: "E", text: "Familiarity" }
+          ],
+          correct: ["B", "C"],
+          explanation: "The situation presents a self-interest threat (B) as Ali's judgement may be influenced by the substantial fee for the additional engagement. By representing Zaral in a legal dispute, Ali also faces an advocacy threat (C), as they would be promoting and defending their client's position, compromising their objectivity."
+        },
+        {
+          id: "Q32", type: "multi", selectCount: 3, lo: "LO 9e",
+          context: "Hamish is a professional accountant who works in business. He is facing an intimidation threat by a senior colleague. Hamish is evaluating the threat to determine if it is at an acceptable level.",
+          question: "Which three of the following are relevant factors that Hamish should consider when evaluating the intimidation threat?",
+          options: [
+            { key: "A", text: "Whether his employer has an effective whistleblowing policy in place" },
+            { key: "B", text: "Whether his employer has a code of ethics and conduct that employees are expected to follow" },
+            { key: "C", text: "Whether his employer is a public interest entity" },
+            { key: "D", text: "Whether his employer offers promotions to staff who comply with the instructions of senior colleagues" },
+            { key: "E", text: "Whether the senior leadership team communicates the importance of ethical behaviour" }
+          ],
+          correct: ["A", "B", "E"],
+          explanation: "When evaluating the threat in business, Hamish should consider workplace conditions and policies: whether there is an effective whistleblowing policy (A), a code of ethics and conduct (B), and whether senior leadership communicates the importance of ethical behaviour (E). Whether it is a public interest entity (C) or promotion practices (D) are not relevant factors here."
+        },
+        {
+          id: "Q33", type: "multi", selectCount: 2, lo: "LO 9e",
+          context: "Professional accountants may face various workplace pressures that can threaten compliance with the ICAEW Code of Ethics.",
+          question: "Which two of the following are specific pressures that may lead a professional accountant to breach the ICAEW Code of Ethics?",
+          options: [
+            { key: "A", text: "A bonus will be paid to all employees if a revenue target is achieved" },
+            { key: "B", text: "The professional accountant is keen to meet their objectives in order to secure a promotion" },
+            { key: "C", text: "The professional accountant is asked by management to perform work that they are not trained to do" },
+            { key: "D", text: "The professional accountant has a mentor available to discuss matters with" },
+            { key: "E", text: "The professional accountant can use the company whistleblowing helpline to report matters" }
+          ],
+          correct: ["A", "C"],
+          explanation: "The accountant may feel pressure to misreport financial information to secure the company-wide bonus (A) and pressure from management to perform work they are not trained to do (C). Having a mentor (D) and whistleblowing helpline (E) are ways to address ethical pressures."
+        },
+        {
+          id: "Q34", type: "single", lo: "LO 9d",
+          context: "The ICAEW Code of Ethics gives specific guidance for professional accountants in business (Part 2) and professional accountants in public practice (Part 3).",
+          question: "Which of the following statements is true?",
+          options: [
+            { key: "A", text: "Advocacy is not a threat for professional accountants working in business" },
+            { key: "B", text: "Professional accountants working in business have six threats: self-interest, self-review, intimidation, advocacy, familiarity and management" },
+            { key: "C", text: "All professional accountants, whether working in business or public practice, could face any of the five threats to the fundamental principles" },
+            { key: "D", text: "Professional accountants working in public practice have six threats: self-interest, self-review, intimidation, advocacy, familiarity and independence" }
+          ],
+          correct: ["C"],
+          explanation: "The five threats to compliance with the fundamental principles (self-interest, self-review, intimidation, advocacy, and familiarity) apply to all professional accountants regardless of whether they work in business or public practice. Only the situations giving rise to these threats differ depending on the workplace."
+        },
+        {
+          id: "Q35", type: "single", lo: "LO 9c",
+          context: "Jhanvi, an accountant at Grammart & Co (Grammart), a professional services firm, has a meeting with a client, Trusl plc (Trusl). Trusl's chief executive suggests recording a significant personal expense of the chief executive as a business expense. Although the chief executive knows that this is incorrect, they argue that it is a common practice among startups and essential for their survival in a competitive market.",
+          question: "What should Jhanvi do to comply with ICAEW's fundamental principle of professional behaviour?",
+          options: [
+            { key: "A", text: "Agree to the request but ensure all details are well documented in the accounts" },
+            { key: "B", text: "Discuss the request with senior management of Grammart to determine how to proceed" },
+            { key: "C", text: "Decline the request and inform Trusl about the proper ethical accounting practices" },
+            { key: "D", text: "Accept the request but propose a smaller expense" }
+          ],
+          correct: ["C"],
+          explanation: "Professional behaviour requires accountants to adhere to ethical standards and legal requirements, avoiding any actions that could discredit the profession. By refusing to agree to the client's request and educating the client on proper practices, Jhanvi upholds their professional integrity and follows the ICAEW guidelines."
+        }
+      ],
+
+      c10: [
+        {
+          id: "Q1", type: "single", lo: "LO 10a",
+          context: "Polen Ltd (Polen) recently adopted a new data analytics tool which is used by its financial accountant to improve its financial forecasting. The tool uses various sources of data, including customer purchase history and market trends. During a review meeting, some employees raised concerns about how the data is being processed and the potential biases in the analysis.",
+          question: "Which action should Polen's financial accountant take to adhere to the data ethics principle of transparency?",
+          options: [
+            { key: "A", text: "Assure employees that the tool is reliable without providing further details" },
+            { key: "B", text: "Continue using the tool and address the concerns of employees only if issues arise in the future" },
+            { key: "C", text: "Provide a detailed explanation of the data sources, processing methods and any limitations or assumptions made in the analysis" },
+            { key: "D", text: "Limit access to the tool's outputs to only senior management to control information flow" }
+          ],
+          correct: ["C"],
+          explanation: "Transparency involves being clear and open about how data is collected, processed, and used. By providing detailed explanations (C), Polen's financial accountant ensures that employees understand how the data is handled, which helps to build trust and accountability."
+        },
+        {
+          id: "Q2a", type: "single", lo: "LO 10a",
+          context: "AQP LLP (AQP), an accounting firm, is implementing a new data management system that involves collecting, using and storing clients' personal data. It must ensure that it complies with data ethics principles, specifically focusing on obtaining proper consent.\n\nSituation 1: AQP emails clients a detailed form outlining the purpose of data collection and how the data will be used, stored, and shared. Clients are required to tick a box to indicate that they understand and approve this before any data collection begins.",
+          question: "Determine if AQP is complying or not complying with the principle of consent.",
+          options: [
+            { key: "A", text: "Complying" },
+            { key: "B", text: "Not complying" }
+          ],
+          correct: ["A"],
+          explanation: "AQP is complying with the principle of consent because it provides a detailed form clearly explaining the purpose of data collection and how data will be used, stored, and shared, and requires clients to take an explicit action (ticking a box) to give informed explicit consent before any data collection begins."
+        },
+        {
+          id: "Q2b", type: "single", lo: "LO 10a",
+          context: "AQP LLP (AQP), an accounting firm, is implementing a new data management system that involves collecting, using and storing clients' personal data.\n\nSituation 2: AQP begins collecting personal data from clients through its website, but only includes a brief statement at the bottom of the webpage stating that, by continuing to use the site, clients are agreeing to the collection and use of their data.",
+          question: "Determine if AQP is complying or not complying with the principle of consent.",
+          options: [
+            { key: "C", text: "Complying" },
+            { key: "D", text: "Not complying" }
+          ],
+          correct: ["D"],
+          explanation: "AQP is not complying as simply using the website does not constitute informed explicit consent. The statement should contain detailed information, be prominently displayed and require explicit action from clients, such as ticking a box, to indicate their consent."
+        },
+        {
+          id: "Q2c", type: "single", lo: "LO 10a",
+          context: "AQP LLP (AQP), an accounting firm, is implementing a new data management system that involves collecting, using and storing clients' personal data.\n\nSituation 3: AQP decides to use client data for a new marketing campaign. It assumes consent has been implicitly given as clients have not specifically opted out of marketing communications in the past.",
+          question: "Determine if AQP is complying or not complying with the principle of consent.",
+          options: [
+            { key: "E", text: "Complying" },
+            { key: "F", text: "Not complying" }
+          ],
+          correct: ["F"],
+          explanation: "Assuming consent for a new use of data without explicit permission is also not complying with the consent principle."
+        },
+        {
+          id: "Q3", type: "single", lo: "LO 10a, 10d",
+          context: "ZTY Inc (ZTY), an online accounting software provider, has added a new feature allowing its users to integrate their bank accounts directly with the software for real-time financial updates. However, a user has expressed concern about the potential risks of exposing sensitive banking details through this integration.",
+          question: "Which step should ZTY take to most effectively address the user's privacy concerns?",
+          options: [
+            { key: "A", text: "Provide a user guide on how to use the new feature" },
+            { key: "B", text: "Request users to update their passwords regularly" },
+            { key: "C", text: "Reassure users with a general statement about the company's commitment to privacy" },
+            { key: "D", text: "Implement encryption and access controls to protect banking data" }
+          ],
+          correct: ["D"],
+          explanation: "Implementing encryption ensures that the data is secure during transmission and storage, while access controls restrict unauthorised access, thereby addressing the user's concerns about data privacy effectively (D)."
+        },
+        {
+          id: "Q4", type: "single", lo: "LO 10a",
+          context: "Telef plc (Telef) has implemented a new AI system for monitoring employee productivity by analysing communication patterns, such as emails and messages. It has been observed that the system identifies multilingual employees as being less productive due to the additional time taken to switch between languages in their communications.",
+          question: "What action should Telef take to address the fairness issue identified in its productivity monitoring AI system?",
+          options: [
+            { key: "A", text: "Continue using the AI system for all employees but exclude multilingual communications from the productivity analysis" },
+            { key: "B", text: "Modify the AI system to account for the time spent switching languages and include this context in the productivity analysis" },
+            { key: "C", text: "Use the AI system only for employees who communicate in a single language to ensure consistency in monitoring" },
+            { key: "D", text: "Implement a manual review process to adjust productivity scores for multilingual employees after the AI analysis" }
+          ],
+          correct: ["B"],
+          explanation: "This action ensures fairness by correcting the bias in the AI system and providing a more accurate productivity assessment for multilingual employees (B). Excluding multilingual communications (A) or selectively using AI (C) does not fix the bias, and manual adjustments (D) can be inconsistent and prone to human error."
+        },
+        {
+          id: "Q5", type: "single", lo: "LO 10a",
+          context: "During the payroll processing at Malin Inc (Malin), the payroll accountant, Rukhsana, discovers an increase in the total payroll expense compared to the previous month. Upon examining a sample of the payroll records, she notices that there are duplicated entries for some employees' overtime hours.",
+          question: "What action should Rukhsana take to ensure the accuracy of the payroll records?",
+          options: [
+            { key: "A", text: "Conduct a company-wide employee inquiry to verify the overtime hours" },
+            { key: "B", text: "Report the discrepancy to the finance department without making any changes" },
+            { key: "C", text: "Approve the payroll as it is, assuming the variance is within the normal range" },
+            { key: "D", text: "Identify and eliminate all the duplicated entries to reflect the correct overtime hours worked" }
+          ],
+          correct: ["D"],
+          explanation: "Ensuring accurate payroll records is essential, and resolving discrepancies from duplicated entries will help maintain correct financial reporting (D)."
+        },
+        {
+          id: "Q6", type: "single", lo: "LO 10a",
+          context: "Evelyn, an accountant at YUT GmbH, discovers that the client data used for her recent financial analysis includes outdated information. This oversight violates data protection regulations and compromises the accuracy of the analysis, potentially misleading stakeholders.",
+          question: "What action should Evelyn take to demonstrate accountability and rectify the situation in line with data protection regulations and ethical practices?",
+          options: [
+            { key: "A", text: "Manually adjust the analysis results to align with expected outcomes without updating the data or informing stakeholders" },
+            { key: "B", text: "Update the client data to ensure it is accurate, inform relevant stakeholders about the data discrepancies, and review data processing protocols to prevent future occurrences" },
+            { key: "C", text: "Argue that the outdated data does not breach any regulations and proceed without making changes to the data processing protocols" },
+            { key: "D", text: "Continue using the outdated data and suggest that any discrepancies are minor and do not significantly affect the analysis" }
+          ],
+          correct: ["B"],
+          explanation: "Demonstrating accountability involves taking immediate action to rectify data inaccuracies, being transparent with stakeholders, and implementing preventive measures to uphold data protection regulations and maintain ethical practices (B)."
+        },
+        {
+          id: "Q7", type: "single", lo: "LO 10a",
+          context: "Hafsa, an accountant, is analysing financial data received from her client, Archway Ltd (Archway). During the analysis, it is noticed that the sales data shows unusually high sales figures for a specific quarter without a clear explanation. Hafsa suspects that there might be an error or bias in the data provided by Archway.",
+          question: "What action should Hafsa take to ensure the integrity and accuracy of the financial report according to data ethics principles?",
+          options: [
+            { key: "A", text: "Accept the data as it is and proceed to finalise the financial report to meet deadlines" },
+            { key: "B", text: "Investigate the data further and cross-check with supporting documents to verify it" },
+            { key: "C", text: "Report the issue to her manager but take no further action" },
+            { key: "D", text: "Exclude the questionable quarter from the report to avoid potential bias" }
+          ],
+          correct: ["B"],
+          explanation: "According to data ethics principles, it is crucial to maintain professional scepticism and ensure the accuracy of financial data. By investigating and verifying the data, Hafsa upholds the principle of accuracy, ensuring that the financial report is true and unbiased (B)."
+        },
+        {
+          id: "Q8", type: "single", lo: "LO 10b, 10c",
+          context: "Nasreen, a professional accountant at Kilo SpA (Kilo), is reviewing the company's year-end financial statements which were compiled by her team. Nasreen notices that a significant portion of the revenue entries are based on data provided by a new automated sales logging system. Although the system was installed in accordance with the software developers' instructions, Nasreen realises that the system has not undergone any verification for accuracy or reliability since its implementation.",
+          question: "What action should Nasreen take to fulfil her responsibility under the principles of data ethics and professional scepticism?",
+          options: [
+            { key: "A", text: "Nasreen should approve the financial statements as an automated system should be accurate" },
+            { key: "B", text: "Nasreen should consult with her team and assume the data is accurate since the system was implemented in accordance with the software developers' instructions" },
+            { key: "C", text: "Nasreen should manually adjust the revenue entries to reflect her estimations without verifying the data" },
+            { key: "D", text: "Nasreen should initiate an independent verification of the automated sales logging system's data accuracy and reliability before finalising the financial statements" }
+          ],
+          correct: ["D"],
+          explanation: "Professional scepticism requires Nasreen to critically evaluate the accuracy and reliability of the revenue data, especially since the system has not been verified (D)."
+        },
+        {
+          id: "Q9", type: "single", lo: "LO 10a, 10b",
+          context: "Wafa, the senior accountant at Filip plc, is evaluating a financial analysis model. Wafa discovers that the model disproportionately favours high-income regions when predicting sales growth, due to biased historical data input. Wafa realises that continuing to use this model could lead to unfair business decisions and potentially mislead shareholders.",
+          question: "What action should Wafa take to uphold data ethics and address the bias in the financial analysis model?",
+          options: [
+            { key: "A", text: "Wafa should report the biased findings to her manager but continue using the existing model as it is" },
+            { key: "B", text: "Wafa should recalibrate the model to ensure it uses a more diverse and representative dataset and re-evaluate the predictions" },
+            { key: "C", text: "Wafa should discontinue use of the model without informing anyone and manually adjust the predictions" },
+            { key: "D", text: "Wafa should immediately publish a report acknowledging potential biases and leave the decision to the shareholders" }
+          ],
+          correct: ["B"],
+          explanation: "To maintain data ethics, Wafa must address the identified bias by reworking the model to use diverse and fair data and re-evaluating the predictions (B)."
+        },
+        {
+          id: "Q10", type: "single", lo: "LO 10b",
+          context: "Lons GmbH (Lons) is evaluating the risk of its investment portfolio by analysing data from the top 50 performing shares over the past five years. The company intends to use this analysis to predict future investment risks and returns.",
+          question: "What type of bias is likely to affect the analysis?",
+          options: [
+            { key: "A", text: "Confirmation bias" },
+            { key: "B", text: "Algorithmic bias" },
+            { key: "C", text: "Sampling bias" },
+            { key: "D", text: "Omitted variable bias" }
+          ],
+          correct: ["C"],
+          explanation: "Sampling bias (C) occurs when the sample chosen for analysis is not representative of the entire dataset or population. Analysing only the top 50 performing shares is not representative of all possible stock performances, leading to a misleading assessment of risks and returns."
+        },
+        {
+          id: "Q11", type: "single", lo: "LO 10b",
+          context: "Taurin plc (Taurin) uses an AI-based system to approve loan applications. The AI system has been trained on historical data, which predominantly consists of applications from a specific region. Recently, it was observed that the AI system disproportionately denies applications from other regions, despite similar financial profiles.",
+          question: "What type of data bias is affecting the AI system's decisions?",
+          options: [
+            { key: "A", text: "Algorithmic bias" },
+            { key: "B", text: "Selection bias" },
+            { key: "C", text: "Confirmation bias" },
+            { key: "D", text: "Survivorship bias" }
+          ],
+          correct: ["A"],
+          explanation: "Algorithmic bias (A) occurs when AI systems or algorithms produce biased outcomes due to the biased historical data they were trained on. Taurin's AI system was trained on data from a specific region, leading it to unfairly deny applications from other regions."
+        },
+        {
+          id: "Q12", type: "single", lo: "LO 10c",
+          context: "Umar received a financial dataset from a newly implemented automated system and intends to use it to prepare a financial report. The dataset indicates a significant increase in revenue, but Umar has noticed the dataset lacks entries from several key months.",
+          question: "What action should Umar take regarding the dataset?",
+          options: [
+            { key: "A", text: "Use the dataset as it is since the automated system is new" },
+            { key: "B", text: "Estimate the missing data based on previous months' performance and include it in the report" },
+            { key: "C", text: "Disregard the potentially missing data and proceed with the financial report highlighting the increased revenue" },
+            { key: "D", text: "Investigate the automated system's data capture process and cross-check with manual records for the missing months" }
+          ],
+          correct: ["D"],
+          explanation: "By investigating the data capture process and verifying it against manual records, Umar can ensure the dataset's accuracy. Relying solely on the new system or making assumptions about the data can lead to inaccurate reporting and ethical breaches."
+        },
+        {
+          id: "Q13", type: "single", lo: "LO 10c",
+          context: "Paige, the senior accountant at Belingo Inc (Belingo), has received two datasets: one from the company's internal system and one from an independent market analysis firm. The datasets show conflicting financial results for the same period, with the internal data indicating a significant loss and the external data showing a small profit. The board has asked Paige to prepare a financial report using this information, which they need finalised urgently, to inform strategic decisions.",
+          question: "What action should Paige take in this situation?",
+          options: [
+            { key: "A", text: "Use the external market analysis data since it shows a profit, which will be more favourable for strategic decision making" },
+            { key: "B", text: "Conduct a reconciliation between the two datasets to identify the discrepancies and validate the accuracy of the internal data" },
+            { key: "C", text: "Proceed with using the internal data as it is sourced from the company's own system and is likely to be more accurate" },
+            { key: "D", text: "Average the results from both datasets and use this as the basis for the financial report to account for both perspectives" }
+          ],
+          correct: ["B"],
+          explanation: "By reconciling the datasets and investigating the root causes of the discrepancies, Paige ensures that the financial report is based on accurate and reliable data (B). Simply choosing one dataset or averaging results could lead to inaccurate reporting."
+        },
+        {
+          id: "Q14", type: "single", lo: "LO 10c",
+          context: "Neil is analysing the results of a customer satisfaction survey dataset which he needs to use in an important strategic report. He notices that the data heavily reflects responses from younger customers, while the older demographic is significantly underrepresented. This discrepancy could skew the performance analysis and lead to biased conclusions.",
+          question: "What action should Neil take in this situation?",
+          options: [
+            { key: "A", text: "Proceed with the analysis using the existing dataset, asserting that all customer feedback is valuable" },
+            { key: "B", text: "Balance the responses by reducing the weighting of the younger customers' feedback and increasing the weighting of the older demographic feedback" },
+            { key: "C", text: "Exclude the survey results from the performance analysis entirely to avoid any bias in the conclusion" },
+            { key: "D", text: "Request additional survey data specifically targeting the underrepresented older demographic to balance the representation" }
+          ],
+          correct: ["D"],
+          explanation: "By requesting additional data from the underrepresented demographic, Neil ensures a more balanced and comprehensive analysis (D). Adjusting weights (B) involves subjective decisions and distorts original data, while excluding the dataset (C) loses valuable insights."
+        },
+        {
+          id: "Q15", type: "single", lo: "LO 10c",
+          context: "Nuno has been using a new machine learning model to predict annual sales figures. While reviewing the model's output, Nuno observes that the predicted sales figures are significantly lower than previous years, despite no major changes in market conditions or company operations. Upon further examination, Nuno realises that the model might be excluding some historical sales data due to incorrect data categorisation.",
+          question: "What action should Nuno take in this situation?",
+          options: [
+            { key: "A", text: "Accept the machine learning model's output as it is and adjust next year's sales strategy accordingly" },
+            { key: "B", text: "Ignore the model's predictions and base the sales forecast solely on the previous year's figures" },
+            { key: "C", text: "Review the data inputs for the machine learning model, correct any miscategorised data and re-run the analysis to verify the accuracy of the predictions" },
+            { key: "D", text: "Request the IT department develop a new machine learning model without reviewing the existing data issues" }
+          ],
+          correct: ["C"],
+          explanation: "Professional scepticism involves critically evaluating data, including understanding and validating the inputs for automated models. By reviewing and correcting the data inputs and re-running the analysis, Nuno ensures accurate and reliable predictions."
+        },
+        {
+          id: "Q16", type: "single", lo: "LO 10c",
+          context: "Julie, an auditor, is reviewing the data used for creating Funwick Ltd's (Funwick) future financial projections. Julie comes across two different sources of data that provide significantly inconsistent projected cash flows for the upcoming year. One source is an internal financial forecast prepared by Funwick's finance team, and the other is an independent market analysis report.",
+          question: "What should Julie's next step be in this situation?",
+          options: [
+            { key: "A", text: "Investigate the discrepancies to understand the methodologies used by the finance team and the authors of the market analysis report and reconcile the differences" },
+            { key: "B", text: "Ignore the market analysis report and rely solely on the internal financial forecast prepared by the finance team" },
+            { key: "C", text: "Use figures from both sources to calculate a middle-ground projection" },
+            { key: "D", text: "Adjust the projections to align with the more conservative figures to avoid optimistic bias" }
+          ],
+          correct: ["A"],
+          explanation: "Professional scepticism requires auditors to critically assess discrepancies and seek a clear understanding of the underlying methodologies. By doing so, Julie can reconcile the differences and ensure the projections are based on reliable data."
+        },
+        {
+          id: "Q17", type: "single", lo: "LO 10c",
+          context: "Lalit, an accountant at Tungst Inc (Tungst), implemented a new financial analytics tool to enhance performance reporting. During the first quarter review, Lalit noticed that the tool consistently recommended investments only in technology shares, despite a company policy to diversify investments across various sectors.",
+          question: "What should Lalit's next step be to ensure that the investment recommendations are unbiased and align with Tungst's diversification policy?",
+          options: [
+            { key: "A", text: "Continue following the tool's recommendations" },
+            { key: "B", text: "Consult with the finance team to manually add diversified investment options without assessing the tool" },
+            { key: "C", text: "Review and assess the data inputs and algorithms used by the tool to identify potential biases and adjust them to ensure recommendations are diversified" },
+            { key: "D", text: "Ignore the tool's recommendations and manually create an investment portfolio based on last year's performance data" }
+          ],
+          correct: ["C"],
+          explanation: "Professional scepticism involves critically evaluating the tools and data used in financial reporting to detect and correct biases. By assessing and adjusting the inputs and algorithms, Lalit ensures unbiased recommendations aligned with company policy."
+        },
+        {
+          id: "Q18", type: "single", lo: "LO 10c",
+          context: "Leah, the accountant at Buzwick plc (Buzwick), is finalising the year-end financial statements. She notices inconsistencies in departmental expense reports created by Buzwick's accounting system and submitted by the department heads. Some departments have unusually high expenses with inadequate or missing documentation, while others show drastic reductions without clear justifications.",
+          question: "What should Leah's next step be to address the inconsistencies?",
+          options: [
+            { key: "A", text: "Adjust the expenses to an average amount based on past years' data without further investigation" },
+            { key: "B", text: "Accept the expense reports as submitted to avoid confrontation with department heads" },
+            { key: "C", text: "Exclude the suspicious expenses from the financial statements to maintain consistency" },
+            { key: "D", text: "Investigate the discrepancies by requesting additional documentation and explanations from the departments and cross-reference with approved budgets" }
+          ],
+          correct: ["D"],
+          explanation: "Professional scepticism involves critically evaluating data, seeking additional evidence, and ensuring the accuracy and reliability of the financial statements. By investigating and obtaining more information, Leah can resolve discrepancies."
+        },
+        {
+          id: "Q19", type: "single", lo: "LO 10b",
+          context: "Nina is overseeing the implementation of a new data analytics tool for financial forecasting. During the initial review, Nina notices that the tool's predictions heavily favour data from profitable quarters while ignoring less profitable periods, potentially skewing future forecasts. Additionally, the tool uses outdated economic indicators that may not reflect current market trends.",
+          question: "What action should Nina take regarding the bias introduced by the data analytics tool?",
+          options: [
+            { key: "A", text: "Nina should use the tool as it is since it highlights the company's strengths in profitable quarters" },
+            { key: "B", text: "Nina should manually adjust the future forecasts to account for biases without changing the tool's data inputs" },
+            { key: "C", text: "Nina should continue using the tool and report any irregularities to her manager without making any adjustments" },
+            { key: "D", text: "Nina should update the tool to include data from all periods and incorporate current economic indicators to provide a balanced forecast" }
+          ],
+          correct: ["D"],
+          explanation: "To ensure the accuracy and reliability of financial forecasts, Nina must address data bias by incorporating a comprehensive dataset that includes all relevant periods and updates economic indicators (D)."
+        },
+        {
+          id: "Q20", type: "single", lo: "LO 10b",
+          context: "Asad, an accountant at Lizul GmbH (Lizul), is conducting an end-of-year financial review. He notices that a significant amount of the inventory valuation data in Lizul's financial records was sourced from an outdated third-party database that has not been updated in over two years. Asad is concerned that relying on this data could lead to inaccurate financial reporting.",
+          question: "What action should Asad take regarding the financial review?",
+          options: [
+            { key: "A", text: "Asad should ignore the financial records that are based on the outdated data" },
+            { key: "B", text: "Asad should estimate the potential changes over the past two years and adjust the data accordingly himself" },
+            { key: "C", text: "Asad should verify the financial data using current and reliable sources before including it in the financial records" },
+            { key: "D", text: "Asad should use the data as it is, since it was sourced from a previously reliable third-party database" }
+          ],
+          correct: ["C"],
+          explanation: "Upholding the principle of accuracy requires Asad to ensure that the financial data is correct, relevant and up to date (C). Using data not updated in over two years can lead to significant inaccuracies in financial reporting."
+        },
+        {
+          id: "Q21", type: "single", lo: "LO 10b",
+          context: "Insight Consultancy is conducting an audit for Clouz BV (Clouz), a technology company that has experienced rapid growth. The auditors notice that Clouz's financial projections are based only on data from the most profitable regions, neglecting underperforming markets.",
+          question: "Which type of data bias is identified in this scenario?",
+          options: [
+            { key: "A", text: "Confirmation bias" },
+            { key: "B", text: "Selection bias" },
+            { key: "C", text: "Algorithmic bias" },
+            { key: "D", text: "Survivorship bias" }
+          ],
+          correct: ["B"],
+          explanation: "Selection bias (B) occurs when the data collected is not representative of the broader population or market. Basing financial projections solely on the most profitable regions neglects underperforming markets, leading to skewed and overly optimistic predictions."
+        },
+        {
+          id: "Q22", type: "single", lo: "LO 10b",
+          context: "Longturn plc (Longturn) is developing a new renewable energy project. The project team is convinced that solar energy is the most viable option. During the data collection phase, the project team predominantly selects studies and reports that highlight the benefits of solar energy while ignoring those that discuss potential downsides or alternatives.",
+          question: "Which type of data bias is the project team exhibiting in this scenario?",
+          options: [
+            { key: "A", text: "Confirmation bias" },
+            { key: "B", text: "Selection bias" },
+            { key: "C", text: "Survivorship bias" },
+            { key: "D", text: "Sampling bias" }
+          ],
+          correct: ["A"],
+          explanation: "Confirmation bias (A) refers to the tendency to favour data that supports pre-existing beliefs while disregarding contradictory evidence."
+        },
+        {
+          id: "Q23a", type: "single", lo: "LO 10a, 10d",
+          context: "Carlos and his team are implementing new data ethics practices relating to sales and customer relations.\n\nScenario 1: While developing a new customer relationship management (CRM) system, the team realises that the system automatically collects more personal data than is necessary for managing customer interactions.",
+          question: "Select the most appropriate data ethics principle that should be applied to address the issue.",
+          options: [
+            { key: "A", text: "Transparency" },
+            { key: "B", text: "Privacy" },
+            { key: "C", text: "Accuracy" }
+          ],
+          correct: ["B"],
+          explanation: "One aspect of privacy is data minimisation, which ensures that only necessary data is collected, reducing the risk of misuse or breach."
+        },
+        {
+          id: "Q23b", type: "single", lo: "LO 10a, 10d",
+          context: "Carlos and his team are implementing new data ethics practices relating to sales and customer relations.\n\nScenario 2: Employees in the sales team are unsure about the specific purposes of data collected from surveys and are therefore vague in their explanations to potential participants, leading to some reluctance from those individuals to take part in the surveys and provide accurate information.",
+          question: "Select the most appropriate data ethics principle that should be applied to address the issue.",
+          options: [
+            { key: "D", text: "Consent" },
+            { key: "E", text: "Accountability" },
+            { key: "F", text: "Transparency" }
+          ],
+          correct: ["F"],
+          explanation: "Transparency involves clear communication about data collection and its purposes, building trust and enhancing data quality."
+        },
+        {
+          id: "Q23c", type: "single", lo: "LO 10a, 10d",
+          context: "Carlos and his team are implementing new data ethics practices relating to sales and customer relations.\n\nScenario 3: During a review, it is discovered that some customer data entries contain outdated addresses, leading to failed deliveries and customer dissatisfaction.",
+          question: "Select the most appropriate data ethics principle that should be applied to address the issue.",
+          options: [
+            { key: "G", text: "Accuracy" },
+            { key: "H", text: "Fairness" },
+            { key: "I", text: "Accountability" }
+          ],
+          correct: ["G"],
+          explanation: "Accuracy ensures that all data used is correct and up-to-date, vital for successful operational outcomes and customer satisfaction."
+        },
+        {
+          id: "Q24a", type: "single", lo: "LO 10d",
+          context: "Yolip Ltd (Yolip) is reviewing its data management policies to ensure compliance with data protection regulations.\n\nScenario 1: Employees at Yolip are found saving confidential client data onto unsecured external USB drives.",
+          question: "Select the most appropriate action to address this situation.",
+          options: [
+            { key: "A", text: "Allow unrestricted use of external USB drives for convenience" },
+            { key: "B", text: "Implement encryption and secure access controls for external storage devices" },
+            { key: "C", text: "Recommend that employees avoid using external storage devices" }
+          ],
+          correct: ["B"],
+          explanation: "Implementing encryption and secure access controls for external storage devices ensures that sensitive data is protected even when transferred to external media, reducing the risk of data breaches."
+        },
+        {
+          id: "Q24b", type: "single", lo: "LO 10d",
+          context: "Yolip Ltd (Yolip) is reviewing its data management policies to ensure compliance with data protection regulations.\n\nScenario 2: During a security audit, it was discovered that old, unencrypted laptops containing sensitive client data were being recycled without proper data wiping.",
+          question: "Select the most appropriate action to address this situation.",
+          options: [
+            { key: "D", text: "Store old laptops indefinitely in a secure location" },
+            { key: "E", text: "Donate old laptops to charity on the condition that the charity arranges for the data to be wiped" },
+            { key: "F", text: "Establish a process for secure data wiping and disposal of old hardware" }
+          ],
+          correct: ["F"],
+          explanation: "Establishing a secure data wiping process ensures that sensitive information is completely removed before hardware is disposed of or recycled, protecting against unauthorised access to old data."
+        },
+        {
+          id: "Q25a", type: "single", lo: "LO 10d",
+          context: "Anty plc (Anty) is conducting a comprehensive review of its data handling and security procedures.\n\nSituation 1: The compliance officer at Anty plc notices that employee passwords are not required to be complex and are seldom changed.",
+          question: "Select the most appropriate action to resolve the issue and ensure compliance with data protection principles.",
+          options: [
+            { key: "A", text: "Implement a company-wide robust password policy" },
+            { key: "B", text: "Do nothing, as current measures seem adequate" },
+            { key: "C", text: "Disable password protection to streamline workflow" }
+          ],
+          correct: ["A"],
+          explanation: "Implementing a policy for complex passwords and regular changes will enhance security and reduce the risk of data breaches."
+        },
+        {
+          id: "Q25b", type: "single", lo: "LO 10d",
+          context: "Anty plc (Anty) is conducting a comprehensive review of its data handling and security procedures.\n\nSituation 2: During a routine check, the compliance officer finds that numerous employees have access to the entire customer database, despite many not needing this information for their work.",
+          question: "Select the most appropriate action to resolve the issue and ensure compliance with data protection principles.",
+          options: [
+            { key: "D", text: "Restrict database access based on job roles and responsibilities" },
+            { key: "E", text: "Allow all employees unrestricted access for transparency" },
+            { key: "F", text: "Remove access controls entirely to simplify data retrieval" }
+          ],
+          correct: ["D"],
+          explanation: "Restricting database access ensures that only those who need the information can access it, protecting sensitive data."
+        },
+        {
+          id: "Q25c", type: "single", lo: "LO 10d",
+          context: "Anty plc (Anty) is conducting a comprehensive review of its data handling and security procedures.\n\nSituation 3: The compliance officer discovers that obsolete client records, containing personal data, are being retained indefinitely on the company server.",
+          question: "Select the most appropriate action to resolve the issue and ensure compliance with data protection principles.",
+          options: [
+            { key: "G", text: "Continue storing all client records indefinitely for future reference" },
+            { key: "H", text: "Establish a policy for regular deletion of obsolete records" },
+            { key: "I", text: "Transfer old records to an external storage device without encryption" }
+          ],
+          correct: ["H"],
+          explanation: "Establishing a policy for regular deletion of obsolete records ensures that Anty complies with data minimisation principles and reduces the risk of accidental breaches of outdated information."
+        },
+        {
+          id: "Q26", type: "single", lo: "LO 10d",
+          context: "Judd Inc (Judd) has developed a new software product that it considers a trade secret. Judd is concerned about protecting this commercially sensitive information from competitors and internal leaks.",
+          question: "Which of the following actions should Judd take regarding its trade secret?",
+          options: [
+            { key: "A", text: "Implement role-based access controls to ensure that only specific employees can access the software details" },
+            { key: "B", text: "Share the details of the software within the organisation to promote transparency within the business" },
+            { key: "C", text: "Save a copy of the software on the company's intranet" },
+            { key: "D", text: "Patent the software details to make it publicly known but legally protected" }
+          ],
+          correct: ["A"],
+          explanation: "Role-based access controls (A) protect trade secrets from leaks. Sharing within the business (B) or saving on the intranet (C) risks leaks. While patenting (D) provides legal protection, it makes the details publicly available, which is unsuitable for trade secrets."
+        },
+        {
+          id: "Q27", type: "single", lo: "LO 10d",
+          context: "HealthMon plc (HealthMon) collects health data such as heart rate, blood pressure and temperature from patients whilst they are in hospital. Patients give permission for this data to be collected for the purpose of monitoring their health whilst they are being treated. After the patients leave hospital, HealthMon transfers the data to its main database where it is used by the company for research purposes, without any further permission being sought. HealthMon believes that this data is necessary for improving future patient care. They have not notified any supervisory authority of this use.",
+          question: "Which principle of data ethics is HealthMon violating?",
+          options: [
+            { key: "A", text: "Data minimisation" },
+            { key: "B", text: "Data breach notification" },
+            { key: "C", text: "Security" },
+            { key: "D", text: "Consent" }
+          ],
+          correct: ["D"],
+          explanation: "The ethical principle of consent (D) requires that individuals provide explicit permission for their personal data to be collected and used. By not obtaining explicit permission for using the information for research purposes, HealthMon is violating the consent principle."
+        },
+        {
+          id: "Q28", type: "single", lo: "LO 10a, 10e",
+          context: "Hashtag Consulting LLP (Hashtag) has recently integrated a new AI-driven decision-making tool into its data checking processes. Following an internal review, it was discovered that the tool disproportionately identified transactions from one particular demographic group as being potentially fraudulent, leading to increased scrutiny and inconvenience for those individuals.",
+          question: "Which principle of data ethics should Hashtag prioritise to address this issue?",
+          options: [
+            { key: "A", text: "Transparency" },
+            { key: "B", text: "Consent" },
+            { key: "C", text: "Privacy" },
+            { key: "D", text: "Fairness" }
+          ],
+          correct: ["D"],
+          explanation: "The principle of fairness (D) ensures that data practices do not lead to discriminatory or biased outcomes. Hashtag needs to audit and adjust its AI model to ensure it does not unfairly target any particular demographic group."
+        },
+        {
+          id: "Q29", type: "single", lo: "LO 10a, 10e",
+          context: "Jean has introduced an advanced AI system to assist in financial reporting. The AI analyses vast datasets and generates reports that are used by stakeholders. However, stakeholders are provided with the reports without any clear information on how the AI arrived at its conclusions, leading to confusion and mistrust among them.",
+          question: "Which principle of data ethics should Jean focus on to resolve this issue?",
+          options: [
+            { key: "A", text: "Privacy" },
+            { key: "B", text: "Fairness" },
+            { key: "C", text: "Transparency" },
+            { key: "D", text: "Consent" }
+          ],
+          correct: ["C"],
+          explanation: "The principle of transparency (C) requires that organisations provide clear and accessible information about how decisions are made, especially when using AI systems. Increasing transparency helps stakeholders understand how the AI operates and builds trust."
+        },
+        {
+          id: "Q30", type: "single", lo: "LO 10a, 10e",
+          context: "Surma Ltd (Surma) has deployed an AI tool to optimise its financial forecasting. However, the tool's predictions are frequently out of a realistic range due to the system using outdated data. This has led to poor business decisions being taken.",
+          question: "Which principle of data ethics should Surma prioritise to correct this issue?",
+          options: [
+            { key: "A", text: "Fairness" },
+            { key: "B", text: "Transparency" },
+            { key: "C", text: "Privacy" },
+            { key: "D", text: "Accuracy" }
+          ],
+          correct: ["D"],
+          explanation: "The principle of accuracy (D) requires that data should be correct, relevant and up to date. Surma needs to ensure that the data used by the AI tool is current and accurate."
+        },
+        {
+          id: "Q31", type: "single", lo: "LO 10e",
+          context: "MortReal Inc (MortReal), a financial services provider, implemented an AI system to enhance its loan approval process. However, there have been issues with the AI system's lack of transparency, making it difficult to understand the rationale behind loan approvals and rejections.",
+          question: "Which of the following actions is most appropriate for MortReal to proceed with?",
+          options: [
+            { key: "A", text: "Accept the lack of transparency as a trade-off for improved efficiency" },
+            { key: "B", text: "Incorporate Explainable AI (XAI) into the system" },
+            { key: "C", text: "Limit the use of AI to only preliminary checks, keeping final decisions manual" },
+            { key: "D", text: "Reduce the data required for AI processing to simplify the decision-making path" }
+          ],
+          correct: ["B"],
+          explanation: "Explainable AI (XAI) supports transparency by making AI decisions understandable. It will resolve the issue by explaining the rationale behind the loan approvals."
+        },
+        {
+          id: "Q32", type: "multi", selectCount: 2, lo: "LO 10e",
+          context: "The management of Landstone Ltd have decided to implement a new automated system that uses artificial intelligence (AI) to handle customer transactions. They are establishing ethical guidelines for the implementation of the system.",
+          question: "Which two actions should be implemented to ensure ethical use of the new AI system?",
+          options: [
+            { key: "A", text: "Conduct regular audits and reviews of the AI system to identify and correct any biases" },
+            { key: "B", text: "Allow the AI system to operate without human oversight to maximise efficiency" },
+            { key: "C", text: "Maximise the benefit of the personal data by using it for any purpose that the company's directors authorise" },
+            { key: "D", text: "Implement data security protocols to protect customer information" },
+            { key: "E", text: "Recognise that data does not become obsolete over time and store it in case it has future uses" }
+          ],
+          correct: ["A", "D"],
+          explanation: "Conducting regular audits and reviews (A) identifies and mitigates AI biases, while implementing data security protocols (D) protects customer information. Operating without human oversight (B) risks unchecked errors, and repurposing (C) or storing data indefinitely (E) violates privacy and consent."
+        },
+        {
+          id: "Q33", type: "single", lo: "LO 10a, 10e",
+          context: "BuildBridge Inc (BuildBridge) recently launched a new financial app that tracks and analyses users' personal spending habits. The app requires users to input their personal financial information. However, the app's terms of service only mention data collection practices in general terms without providing specific details on how the data will be used.",
+          question: "Which principle of data ethics is being violated in this scenario?",
+          options: [
+            { key: "A", text: "Accuracy" },
+            { key: "B", text: "Consent" },
+            { key: "C", text: "Privacy" },
+            { key: "D", text: "Fairness" }
+          ],
+          correct: ["B"],
+          explanation: "The principle of consent requires that individuals must give informed and explicit permission for their personal data to be collected and used. Failing to provide specific details on how users' data will be used violates the principle of consent."
+        },
+        {
+          id: "Q34", type: "single", lo: "LO 10a, 10e",
+          context: "KiloGen GmbH (KiloGen) launched a new online budgeting tool. The tool collects various personal financial details, including users' spending habits, income and loan information. KiloGen has provided a generic privacy policy on its website, but it does not mention specific details on how the collected data from the new tool will be analysed, shared or stored.",
+          question: "Which principle of data ethics should KiloGen address in this scenario?",
+          options: [
+            { key: "A", text: "Accuracy" },
+            { key: "B", text: "Accountability" },
+            { key: "C", text: "Transparency" },
+            { key: "D", text: "Fairness" }
+          ],
+          correct: ["C"],
+          explanation: "The principle of transparency requires that organisations provide clear and specific information about how data is collected, processed, and used. A generic privacy policy lacking details on analysis, sharing, and storage fails to uphold transparency."
+        },
+        {
+          id: "Q35", type: "single", lo: "LO 10d",
+          context: "Emma is a finance manager at a technology company that has developed a groundbreaking software product. Emma's company is preparing to launch the product, and she is responsible for managing the financial aspects of the launch. Recently, Emma discovered that some employees have been sharing internal emails containing sensitive financial information about the product's pricing strategy.",
+          question: "Which of the following measures will protect commercially sensitive information from accidental employee leaks?",
+          options: [
+            { key: "A", text: "Applying for and securing a patent for the software product" },
+            { key: "B", text: "Automatically protecting the software product under copyright laws" },
+            { key: "C", text: "Restricting employee access to sensitive information and using passwords and encryption" },
+            { key: "D", text: "Communicating an intention to sue any responsible parties for damages if information is leaked" }
+          ],
+          correct: ["C"],
+          explanation: "Restricting employee access and using passwords and encryption (C) directly prevents accidental or deliberate internal leaks. Patents (A) and copyright (B) do not prevent leaks, and suing after the fact (D) does not prevent the initial leak."
+        }
+      ]
+    };
+
+    // =========================================================================
+    // 3. FLASHCARDS DATA (16 FOR CHAPTER 9 + 16 FOR CHAPTER 10)
+    // =========================================================================
+    const CHAPTER_FLASHCARDS = {
+      c9: [
+        { id: "C9-FC1", tag: "LO 9a", front: "5 Categories of Ethical Threats (ICAEW)", back: "1. Self-interest (Tư lợi)\n2. Self-review (Tự kiểm tra)\n3. Advocacy (Bào chữa / Vận động)\n4. Familiarity (Quen thuộc)\n5. Intimidation (Đe dọa / Ép buộc)\n\nÁp dụng cho TẤT CẢ kế toán viên (cả in business lẫn in public practice) — chỉ có tình huống phát sinh là khác nhau." },
+        { id: "C9-FC2", tag: "LO 9a", front: "Self-interest Threat (Nguy cơ tư lợi)", back: "Phát sinh khi lợi ích tài chính hoặc lợi ích cá nhân có thể ảnh hưởng sai lệch tới phán đoán nghề nghiệp.\n\nVí dụ: Sở hữu cổ phiếu khách hàng (hoặc vợ/chồng sở hữu), thưởng theo mục tiêu lợi nhuận, nhận vé concert/đồ điện tử đắt tiền, vay tiền công ty lãi suất ưu đãi, phí dịch vụ bổ sung rất lớn." },
+        { id: "C9-FC3", tag: "LO 9a", front: "Self-review Threat (Nguy cơ tự kiểm tra)", back: "Phát sinh khi kế toán viên phải đánh giá lại sản phẩm/phán đoán do chính mình hoặc nhóm mình thực hiện trước đó, dễ ngại chỉ ra lỗi sai.\n\nVí dụ: Thiết kế hệ thống kiểm soát nội bộ rồi tự đánh giá hiệu quả; tự soát xét BCTC do mình lập; lập báo cáo đánh giá thương vụ M&A mà mình từng tham gia." },
+        { id: "C9-FC4", tag: "LO 9a", front: "Advocacy Threat (Nguy cơ bào chữa)", back: "Phát sinh khi kế toán viên quảng bá hoặc bảo vệ lập trường của khách hàng/công ty tới mức ảnh hưởng tính khách quan.\n\n• In practice: Đại diện khách hàng trong tranh chấp pháp lý, quảng bá cổ phiếu khách hàng, vận động hành lang chính phủ.\n• In business: Bóp méo thông tin trong báo cáo tài chính gửi ngân hàng để vay vốn có lợi." },
+        { id: "C9-FC5", tag: "LO 9a", front: "Familiarity Threat (Nguy cơ quen thuộc)", back: "Phát sinh khi mối quan hệ quá thân thiết hoặc quá lâu dài khiến kế toán viên dễ thông cảm, cả nể với khách hàng/sếp.\n\nVí dụ: Kiểm toán 1 khách hàng suốt 9–10 năm, dự tiệc/retreat cùng ban giám đốc, bạn thân với FD, người thân làm giám đốc công ty khách hàng." },
+        { id: "C9-FC6", tag: "LO 9a", front: "Intimidation Threat (Nguy cơ đe dọa)", back: "Phát sinh khi kế toán viên bị ngăn cản hành động khách quan do áp lực thực tế hoặc cảm nhận được.\n\nVí dụ: FD dọa chấm dứt hợp đồng kiểm toán nếu không bỏ qua sai sót; sếp ép nâng khống doanh thu/thanh khoản và gắn với đánh giá KPI/thăng chức." },
+        { id: "C9-FC7", tag: "LO 9b", front: "Conceptual Framework — 3 Steps", back: "1. IDENTIFY threats to compliance with fundamental principles.\n2. EVALUATE the threats identified (xem có ở mức chấp nhận được không).\n3. ADDRESS the threats: loại bỏ hoàn toàn, áp dụng safeguards để giảm xuống mức chấp nhận được, hoặc TỪ CHỐI/RÚT KHỎI công việc nếu không có safeguard nào đủ." },
+        { id: "C9-FC8", tag: "LO 9b", front: "Reasonable and Informed Third-Party Test", back: "Tự hỏi: Liệu một bên thứ ba hợp lý và có đầy đủ thông tin liên quan có KHẢ NĂNG CAO (likely) đi đến cùng kết luận hay không?\n\n⚠️ Bẫy hay gặp: Bên thứ ba KHÔNG nhất thiết phải là kế toán viên, và dùng từ 'likely' (không phải 'definitely')." },
+        { id: "C9-FC9", tag: "LO 9c", front: "Safeguards: Gifts & Hospitality", back: "Nếu quà tặng/chuyến du lịch sang trọng KHÔNG phải là nhỏ nhặt (not trivial or inconsequential) → bên thứ ba hợp lý sẽ coi là nỗ lực tác động lên phán đoán.\n\nSafeguard không thể giảm nguy cơ xuống mức chấp nhận → PHẢI TỪ CHỐI (Decline) và giải thích rõ lý do đạo đức." },
+        { id: "C9-FC10", tag: "LO 9c", front: "Safeguards: Familiarity & Self-review", back: "• Familiarity (kiểm toán lâu năm): Luân chuyển kiểm toán viên ra khỏi hợp đồng (Rotate off the engagement).\n• Familiarity / Conflict (người thân ở công ty đối tác/khách hàng): Công khai (Disclose) VÀ rút khỏi nhóm/cuộc họp liên quan.\n• Self-review: Nhờ một kế toán viên độc lập (independent accountant) soát xét lại BCTC." },
+        { id: "C9-FC11", tag: "LO 9c", front: "Safeguards: Competence vs. Pressure", back: "• Thiếu kiến thức/kỹ năng (Competence): Học training chuyên ngành hoặc tham vấn đồng nghiệp giàu kinh nghiệm (KHÔNG trì hoãn lỡ deadline, KHÔNG tự làm đại).\n• Bị sếp ép bỏ qua sai sót: Nhờ kế toán viên khác soát xét hoặc báo cáo lên TCWG. (Cho thêm thời gian KHÔNG giải quyết được áp lực từ quản lý!)." },
+        { id: "C9-FC12", tag: "LO 9d", front: "Threats: In Business vs. In Public Practice", back: "• Cả hai đều chỉ có đúng 5 loại threats (không phải 6).\n• Familiarity in business: Làm việc thân thiết với ban giám đốc công ty mình nhiều năm (khác với làm lâu năm cho audit client).\n• Advocacy in business: Bóp méo báo cáo tài chính gửi bên cho vay (khác với đại diện client kiện tụng)." },
+        { id: "C9-FC13", tag: "LO 9e", front: "Pressures to Breach & Evaluating Workplace", back: "Nguồn áp lực: Sếp ép sửa BCTC, thưởng toàn công ty theo doanh thu, deadline phi thực tế, yêu cầu làm việc chưa được đào tạo.\n\nKhi đánh giá áp lực trong doanh nghiệp, cần xem: (1) Có chính sách whistleblowing hiệu quả không, (2) Có Code of Ethics không, (3) Lãnh đạo cấp cao có truyền thông về đạo đức không." },
+        { id: "C9-FC14", tag: "LO 9f", front: "Whistleblowing — First Step & No Policy", back: "• Bước ĐẦU TIÊN khi nghe phong thanh sai phạm: Xác minh sự thật (Establish the facts) trước khi báo cáo. Không đối chất trực tiếp khách hàng/sếp.\n• Nếu nghi sếp trực tiếp gian lận và công ty KHÔNG có chính sách whistleblowing: Tìm lời khuyên từ bên thứ ba độc lập (luật sư hoặc ICAEW)." },
+        { id: "C9-FC15", tag: "LO 9f", front: "Whistleblowing Policy Protections", back: "Một chính sách tố giác tốt cần cung cấp:\n• Đảm bảo không bị trả đũa, quấy rối hay phân biệt đối xử (Assurance against retaliation).\n• Nguồn lực hỗ trợ như tư vấn tâm lý (counselling) và tư vấn pháp lý (legal advice).\n(Không phải thưởng tiền hay đình chỉ ngay đồng nghiệp)." },
+        { id: "C9-FC16", tag: "LO 9f", front: "Consequences of Whistleblowing", back: "• Tích cực (bên ngoài): Có thể nhận khen ngợi từ các tổ chức xã hội/môi trường.\n• Tiêu cực (nội bộ): Dù có luật bảo vệ, người tố giác vẫn có thể gặp trả đũa ngầm — bị bỏ qua khi thăng chức (lack of promotion), rạn nứt quan hệ đồng nghiệp, bị coi là kẻ gây rối (troublemaker)." }
+      ],
+      c10: [
+        { id: "C10-FC1", tag: "LO 10a", front: "6 Core Principles of Data Ethics", back: "1. Transparency (Minh bạch)\n2. Consent (Sự đồng thuận)\n3. Privacy (Quyền riêng tư / Data minimisation)\n4. Fairness (Công bằng / Không phân biệt)\n5. Accuracy (Chính xác & Cập nhật)\n6. Accountability (Trách nhiệm giải trình)" },
+        { id: "C10-FC2", tag: "LO 10a", front: "Transparency (Minh bạch dữ liệu)", back: "Rõ ràng và cởi mở về nguồn dữ liệu, cách thu thập, xử lý, chia sẻ, lưu trữ, cũng như các giả định/hạn chế của công cụ phân tích hoặc AI.\n\nChính sách quyền riêng tư chung chung (generic privacy policy) hoặc không giải thích cách AI ra kết luận → vi phạm Transparency." },
+        { id: "C10-FC3", tag: "LO 10a, 10d", front: "Consent (Sự đồng thuận rõ ràng)", back: "Phải là sự đồng ý có hiểu biết và rõ ràng (informed explicit consent — vd: form chi tiết + khách hàng tự tick ô đồng ý trước khi thu thập).\n\nVi phạm Consent: Dòng chữ nhỏ cuối web ('tiếp tục dùng = đồng ý'), mặc định đồng ý vì chưa opt-out, dùng dữ liệu cho mục đích mới (nghiên cứu/marketing) mà không xin phép lại." },
+        { id: "C10-FC4", tag: "LO 10a, 10d", front: "Privacy & Data Minimisation", back: "• Privacy bảo vệ dữ liệu cá nhân khỏi truy cập trái phép (bằng mã hóa - encryption & kiểm soát truy cập - access controls).\n• Data minimisation: Chỉ thu thập dữ liệu THỰC SỰ CẦN THIẾT và định kỳ xóa dữ liệu lỗi thời (regular deletion of obsolete records)." },
+        { id: "C10-FC5", tag: "LO 10a, 10e", front: "Fairness (Tính công bằng trong AI/Dữ liệu)", back: "Đảm bảo thực hành dữ liệu và AI không dẫn tới kết quả phân biệt đối xử hoặc thiên vị.\n\nVí dụ: AI chấm năng suất đánh giá thấp nhân viên đa ngôn ngữ, hoặc AI chống gian lận gắn cờ quá mức 1 nhóm nhân khẩu học → phải chỉnh sửa/audit lại mô hình AI." },
+        { id: "C10-FC6", tag: "LO 10a, 10b", front: "Accuracy (Tính chính xác của dữ liệu)", back: "Dữ liệu phải đúng, phù hợp và CẬP NHẬT (up-to-date).\n\nHành động chuẩn: Xóa các bản ghi trùng lặp (duplicated overtime), đối chiếu chứng từ gốc khi số liệu bất thường, thay thế cơ sở dữ liệu đã lỗi thời 2 năm bằng nguồn hiện hành đáng tin cậy." },
+        { id: "C10-FC7", tag: "LO 10a", front: "Accountability (Trách nhiệm giải trình)", back: "Chịu trách nhiệm khi phát hiện sai sót dữ liệu (vd: dùng dữ liệu lỗi thời):\n1. Cập nhật sửa lại dữ liệu ngay lập tức.\n2. Thông báo minh bạch cho các bên liên quan bị ảnh hưởng.\n3. Rà soát lại quy trình xử lý dữ liệu để ngăn tái diễn." },
+        { id: "C10-FC8", tag: "LO 10b", front: "Sampling Bias vs. Selection Bias", back: "• Sampling bias: Mẫu chọn để phân tích không đại diện cho toàn bộ tập dữ liệu/tổng thể (vd: chỉ phân tích top 50 cổ phiếu tăng mạnh nhất).\n• Selection bias: Dữ liệu thu thập không đại diện cho toàn thị trường/dân số (vd: dự báo tài chính chỉ lấy dữ liệu từ các khu vực sinh lời cao nhất, bỏ qua thị trường yếu)." },
+        { id: "C10-FC9", tag: "LO 10b", front: "Algorithmic Bias (Thiên kiến thuật toán)", back: "Phát sinh khi hệ thống AI hoặc thuật toán tạo ra kết quả thiên vị do được huấn luyện trên dữ liệu lịch sử bị thiên lệch.\n\nVí dụ: AI duyệt vay được train chủ yếu trên hồ sơ 1 vùng nên từ chối bất công hồ sơ từ các vùng khác dù tài chính tương đương." },
+        { id: "C10-FC10", tag: "LO 10b", front: "Confirmation, Survivorship & Omitted Variable Bias", back: "• Confirmation bias: Chỉ chọn nghiên cứu ủng hộ niềm tin sẵn có (vd: năng lượng mặt trời) và bỏ qua mặt trái.\n• Survivorship bias: Chỉ xét các đối tượng thành công, bỏ qua các đối tượng thất bại.\n• Omitted variable bias: Bỏ sót một hoặc nhiều biến quan trọng khỏi phân tích." },
+        { id: "C10-FC11", tag: "LO 10c", front: "Professional Scepticism with Automated Systems", back: "KHÔNG mặc nhiên tin hệ thống tự động/ML luôn đúng!\n• Hệ thống mới chưa kiểm định → yêu cầu xác minh độc lập (independent verification).\n• Thiếu dữ liệu vài tháng → điều tra quy trình thu thập & đối chiếu sổ tay/chứng từ.\n• ML dự báo bất thường → kiểm tra & sửa lỗi phân loại dữ liệu đầu vào rồi chạy lại." },
+        { id: "C10-FC12", tag: "LO 10c", front: "Handling Conflicting Datasets & Skewed Surveys", back: "• 2 nguồn dữ liệu mâu thuẫn (nội bộ vs. thị trường): Tiến hành đối chiếu (reconciliation) và tìm hiểu phương pháp tính (methodologies) — KHÔNG lấy trung bình, KHÔNG chọn số có lợi.\n• Khảo sát thiếu nhóm khách hàng lớn tuổi: Thu thập thêm dữ liệu mục tiêu vào nhóm bị thiếu (KHÔNG tự ý đổi trọng số chủ quan)." },
+        { id: "C10-FC13", tag: "LO 10d", front: "Data Security Controls (USB, Laptops, Passwords)", back: "• USB / Thiết bị lưu trữ ngoài: Mã hóa (encryption) & kiểm soát truy cập an toàn.\n• Laptop cũ đem tái chế/thanh lý: Thiết lập quy trình xóa sạch dữ liệu an toàn (secure data wiping) trước khi bỏ.\n• Mật khẩu yếu: Áp dụng chính sách mật khẩu mạnh và thay đổi định kỳ toàn công ty." },
+        { id: "C10-FC14", tag: "LO 10d", front: "Role-Based Access Controls (RBAC)", back: "Giới hạn quyền truy cập cơ sở dữ liệu hoặc thông tin nhạy cảm dựa trên vai trò và trách nhiệm công việc (need-to-know basis).\n\nÁp dụng cho: Cơ sở dữ liệu khách hàng, bí mật thương mại (trade secret), chiến lược giá sản phẩm mới (kết hợp mật khẩu & mã hóa)." },
+        { id: "C10-FC15", tag: "LO 10d", front: "Trade Secret vs. Patent & Copyright", back: "• Trade secret (Bí mật thương mại): Giữ kín bằng role-based access controls, mật khẩu, mã hóa. KHÔNG đăng lên intranet hay chia sẻ rộng rãi.\n• Patent (Bằng sáng chế): Bảo hộ pháp lý nhưng phải CÔNG KHAI chi tiết kỹ thuật → KHÔNG phù hợp cho trade secret và không ngăn rò rỉ nội bộ." },
+        { id: "C10-FC16", tag: "LO 10e", front: "Explainable AI (XAI) & Ethical AI Governance", back: "• Explainable AI (XAI): Giúp giải thích lý do đằng sau quyết định của AI (vd: duyệt/từ chối khoản vay) → giải quyết vấn đề thiếu minh bạch (Transparency).\n• Quản trị AI có đạo đức: Kiểm toán/rà soát AI định kỳ để sửa bias + áp dụng giao thức bảo mật dữ liệu + luôn có sự giám sát của con người (human oversight)." }
+      ]
+    };
+
+    // =========================================================================
+    // 4. STATE MANAGEMENT (SEPARATED PER CHAPTER VIA icaew_c9_ & icaew_c10_)
+    // =========================================================================
+    function createEmptyPersisted() {
+      return {
+        cycleNumber: 1,
+        flaggedIds: [],
+        cycleHistory: [],
+        fcStatus: {} // { cardId: 'mastered' | 'review' }
+      };
+    }
+
+    function createEmptyRuntime(chKey) {
+      return {
+        cycleType: "full", // 'full' | 'wrong' | 'flagged'
+        order: [],
+        currentIndex: 0,
+        answers: {},       // { qId: { selected: [], checked: false, isCorrect: false } }
+        examGraded: false,
+        fcOrder: CHAPTER_FLASHCARDS[chKey].map(f => f.id),
+        fcFilter: "all",   // 'all' | 'review' | 'mastered'
+        fcIndex: 0,
+        fcFlipped: false
+      };
+    }
+
+    let persisted = {
+      c9: createEmptyPersisted(),
+      c10: createEmptyPersisted()
+    };
+
+    let session = {
+      activeChapter: "c9",
+      activeTab: "quiz",
+      quizMode: "practice",
+      runtime: {
+        c9: createEmptyRuntime("c9"),
+        c10: createEmptyRuntime("c10")
+      }
+    };
+
+    function loadChapterPersisted(chKey) {
+      const pfx = CHAPTER_META[chKey].prefix;
+      try {
+        const cNum = parseInt(localStorage.getItem(pfx + "cycle_num"), 10);
+        if (!isNaN(cNum) && cNum >= 1) persisted[chKey].cycleNumber = cNum;
+
+        const flagged = JSON.parse(localStorage.getItem(pfx + "flagged") || "[]");
+        if (Array.isArray(flagged)) persisted[chKey].flaggedIds = flagged;
+
+        const history = JSON.parse(localStorage.getItem(pfx + "history") || "[]");
+        if (Array.isArray(history)) persisted[chKey].cycleHistory = history;
+
+        const fc = JSON.parse(localStorage.getItem(pfx + "fc_status") || "{}");
+        if (fc && typeof fc === "object") persisted[chKey].fcStatus = fc;
+      } catch (e) {
+        console.warn("LocalStorage load error:", e);
+      }
+    }
+
+    function saveChapterPersisted(chKey) {
+      const pfx = CHAPTER_META[chKey].prefix;
+      const p = persisted[chKey];
+      try {
+        localStorage.setItem(pfx + "cycle_num", String(p.cycleNumber));
+        localStorage.setItem(pfx + "flagged", JSON.stringify(p.flaggedIds));
+        localStorage.setItem(pfx + "history", JSON.stringify(p.cycleHistory));
+        localStorage.setItem(pfx + "fc_status", JSON.stringify(p.fcStatus));
+      } catch (e) {
+        console.warn("LocalStorage save error:", e);
+      }
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function curCh() { return session.activeChapter; }
+    function curMeta() { return CHAPTER_META[session.activeChapter]; }
+    function curPersisted() { return persisted[session.activeChapter]; }
+    function curRuntime() { return session.runtime[session.activeChapter]; }
+    function curQuestions() { return CHAPTER_QUESTIONS[session.activeChapter]; }
+    function curFlashcards() { return CHAPTER_FLASHCARDS[session.activeChapter]; }
+    function getQuestionById(id) { return curQuestions().find(q => q.id === id); }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.remove("hidden");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.add("hidden"), 2300);
+    }
+
+    // =========================================================================
+    // 5. CHAPTER & TAB SWITCHING
+    // =========================================================================
+    function switchChapter(chKey) {
+      if (session.activeChapter === chKey) return;
+      session.activeChapter = chKey;
+      closeAllModals();
+
+      ["c9", "c10"].forEach(k => {
+        const btn = document.getElementById(`ch-btn-${k}`);
+        if (k === chKey) {
+          btn.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-violet-600 text-white shadow-sm";
+        } else {
+          btn.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900";
+        }
+      });
+
+      const meta = curMeta();
+      document.getElementById("brand-badge").textContent = meta.badge;
+      document.getElementById("header-title").textContent = meta.title;
+      document.getElementById("header-subtitle").textContent = meta.subtitle;
+      document.getElementById("fc-heading").textContent = `Flashcards trọng tâm — ${meta.short}`;
+
+      updateFlagCounter();
+      if (session.activeTab === "quiz") renderQuiz();
+      else renderFlashcard();
+
+      showToast(`Đã chuyển sang ${meta.title}`);
+    }
+
+    function switchTab(tab) {
+      session.activeTab = tab;
+      document.getElementById("view-quiz").classList.toggle("hidden", tab !== "quiz");
+      document.getElementById("view-flashcards").classList.toggle("hidden", tab !== "flashcards");
+
+      const btnQuiz = document.getElementById("tab-quiz");
+      const btnFc = document.getElementById("tab-flashcards");
+      if (tab === "quiz") {
+        btnQuiz.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-white text-violet-700 shadow-sm";
+        btnFc.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900";
+        renderQuiz();
+      } else {
+        btnFc.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-white text-violet-700 shadow-sm";
+        btnQuiz.className = "flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900";
+        renderFlashcard();
+      }
+    }
+
+    function updateFlagCounter() {
+      document.getElementById("header-flag-count").textContent = curPersisted().flaggedIds.length;
+    }
+
+    // =========================================================================
+    // 6. QUIZ ENGINE
+    // =========================================================================
+    function startNewCycle(incrementNumber = true, customIds = null, customType = "full") {
+      closeAllModals();
+      const ch = curCh();
+      const p = curPersisted();
+      const rt = curRuntime();
+
+      if (incrementNumber && !customIds) {
+        p.cycleNumber += 1;
+        saveChapterPersisted(ch);
+      }
+
+      rt.cycleType = customIds ? customType : "full";
+      const ids = customIds ? customIds : curQuestions().map(q => q.id);
+      rt.order = shuffleArray(ids);
+      rt.currentIndex = 0;
+      rt.answers = {};
+      rt.examGraded = false;
+
+      if (session.activeTab !== "quiz") switchTab("quiz");
+      else renderQuiz();
+
+      if (customType === "wrong") {
+        showToast(`Bắt đầu luyện riêng ${ids.length} câu sai!`);
+      } else if (customType === "flagged") {
+        showToast(`Bắt đầu luyện riêng ${ids.length} câu phân vân!`);
+      } else {
+        showToast(`Đã xáo trộn chu kỳ #${p.cycleNumber} (${ids.length} câu)`);
+      }
+    }
+
+    function setQuizMode(mode) {
+      if (session.quizMode === mode) return;
+      session.quizMode = mode;
+
+      const btnP = document.getElementById("mode-practice");
+      const btnE = document.getElementById("mode-exam");
+      if (mode === "practice") {
+        btnP.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-violet-600 text-white shadow-sm";
+        btnE.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:text-slate-900";
+      } else {
+        btnE.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-violet-600 text-white shadow-sm";
+        btnP.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:text-slate-900";
+      }
+
+      const rt = curRuntime();
+      rt.answers = {};
+      rt.examGraded = false;
+      rt.currentIndex = 0;
+      renderQuiz();
+      showToast(mode === "practice" ? "Chế độ Luyện tập: Hiện đáp án ngay" : "Chế độ Kiểm tra: Nộp bài cuối chu kỳ");
+    }
+
+    function checkExactMatch(selected, correct) {
+      if (selected.length !== correct.length) return false;
+      const s = [...selected].sort();
+      const c = [...correct].sort();
+      return s.every((v, i) => v === c[i]);
+    }
+
+    function selectOption(optionKey) {
+      const rt = curRuntime();
+      const qId = rt.order[rt.currentIndex];
+      const q = getQuestionById(qId);
+      const ans = rt.answers[qId] || { selected: [], checked: false, isCorrect: false };
+
+      if ((session.quizMode === "practice" && ans.checked) || (session.quizMode === "exam" && rt.examGraded)) {
+        return;
+      }
+
+      if (q.type === "single") {
+        ans.selected = [optionKey];
+        if (session.quizMode === "practice") {
+          ans.checked = true;
+          ans.isCorrect = checkExactMatch(ans.selected, q.correct);
+        }
+      } else {
+        if (ans.selected.includes(optionKey)) {
+          ans.selected = ans.selected.filter(k => k !== optionKey);
+        } else {
+          if (ans.selected.length < q.selectCount) {
+            ans.selected.push(optionKey);
+          } else {
+            showToast(`Câu này chỉ chọn tối đa ${q.selectCount} đáp án.`);
+            return;
+          }
+        }
+      }
+
+      rt.answers[qId] = ans;
+      renderQuiz();
+    }
+
+    function submitMultiPractice() {
+      const rt = curRuntime();
+      const qId = rt.order[rt.currentIndex];
+      const q = getQuestionById(qId);
+      const ans = rt.answers[qId];
+      if (!ans || ans.selected.length === 0) {
+        showToast(`Hãy chọn ${q.selectCount} đáp án trước khi kiểm tra.`);
+        return;
+      }
+      ans.checked = true;
+      ans.isCorrect = checkExactMatch(ans.selected, q.correct);
+      rt.answers[qId] = ans;
+      renderQuiz();
+    }
+
+    function toggleFlagCurrent() {
+      const ch = curCh();
+      const p = curPersisted();
+      const rt = curRuntime();
+      const qId = rt.order[rt.currentIndex];
+
+      if (p.flaggedIds.includes(qId)) {
+        p.flaggedIds = p.flaggedIds.filter(id => id !== qId);
+        showToast(`Đã bỏ đánh dấu ${qId}`);
+      } else {
+        p.flaggedIds.push(qId);
+        showToast(`Đã đánh dấu ${qId} (Phân vân / Chọn lụi)`);
+      }
+      saveChapterPersisted(ch);
+      updateFlagCounter();
+      renderQuiz();
+    }
+
+    function prevQuestion() {
+      const rt = curRuntime();
+      if (rt.currentIndex > 0) {
+        rt.currentIndex--;
+        renderQuiz();
+      }
+    }
+
+    function nextQuestion() {
+      const rt = curRuntime();
+      if (rt.currentIndex < rt.order.length - 1) {
+        rt.currentIndex++;
+        renderQuiz();
+      } else {
+        finishCycle();
+      }
+    }
+
+    function jumpToQuestion(idx) {
+      curRuntime().currentIndex = idx;
+      closeNavigatorDrawer();
+      renderQuiz();
+    }
+
+    function finishCycle() {
+      const ch = curCh();
+      const p = curPersisted();
+      const rt = curRuntime();
+      const total = rt.order.length;
+      let correctCount = 0;
+      let wrongCount = 0;
+      let flaggedInCycle = 0;
+
+      rt.order.forEach(qId => {
+        const q = getQuestionById(qId);
+        const ans = rt.answers[qId] || { selected: [], checked: false, isCorrect: false };
+        ans.checked = true;
+        ans.isCorrect = checkExactMatch(ans.selected, q.correct);
+        rt.answers[qId] = ans;
+
+        if (ans.isCorrect) correctCount++;
+        else wrongCount++;
+
+        if (p.flaggedIds.includes(qId)) flaggedInCycle++;
+      });
+
+      const alreadyGraded = rt.examGraded;
+      rt.examGraded = true;
+
+      const accuracyRate = Math.round((correctCount / total) * 100);
+      const errorRate = Math.round((wrongCount / total) * 100);
+
+      if (!alreadyGraded) {
+        const labelMap = {
+          full: `Chu kỳ #${p.cycleNumber}`,
+          wrong: `Ôn câu sai (${total} câu)`,
+          flagged: `Ôn phân vân (${total} câu)`
+        };
+        p.cycleHistory.unshift({
+          cycle: labelMap[rt.cycleType],
+          date: new Date().toLocaleString("vi-VN", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }),
+          mode: session.quizMode === "practice" ? "Luyện tập" : "Kiểm tra",
+          total,
+          correct: correctCount,
+          wrong: wrongCount,
+          errorRate,
+          flagged: flaggedInCycle
+        });
+        if (p.cycleHistory.length > 25) p.cycleHistory.pop();
+        saveChapterPersisted(ch);
+      }
+
+      document.getElementById("modal-cycle-subtitle").textContent =
+        `${curMeta().short} • ${rt.cycleType === "full" ? "Chu kỳ #" + p.cycleNumber : "Phiên ôn tập trung"} • ${session.quizMode === "practice" ? "Luyện tập" : "Kiểm tra"} (${total} câu)`;
+      document.getElementById("modal-correct").textContent = `${correctCount}/${total} (${accuracyRate}%)`;
+      document.getElementById("modal-wrong").textContent = wrongCount;
+      document.getElementById("modal-error-rate").textContent = `${errorRate}%`;
+      document.getElementById("modal-flagged").textContent = flaggedInCycle;
+
+      document.getElementById("modal-btn-new-cycle").textContent = `Bắt đầu chu kỳ mới (Xáo trộn ${curQuestions().length} câu)`;
+
+      const wrongBtn = document.getElementById("modal-btn-wrong");
+      wrongBtn.classList.toggle("hidden", wrongCount === 0);
+      wrongBtn.textContent = `Luyện riêng ${wrongCount} câu sai`;
+
+      const flagBtn = document.getElementById("modal-btn-flagged");
+      flagBtn.classList.toggle("hidden", p.flaggedIds.length === 0);
+      flagBtn.textContent = `Luyện riêng ${p.flaggedIds.length} câu phân vân / chọn lụi`;
+
+      const preview = document.getElementById("modal-history-preview");
+      const recent = p.cycleHistory.slice(0, 4);
+      preview.innerHTML = `
+        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Lịch sử chu kỳ gần đây (${curMeta().short})</p>
+        <div class="space-y-1.5 text-xs">
+          ${recent.map(h => `
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-700">${h.cycle} <span class="text-slate-400 font-normal">(${h.date})</span></span>
+              <span class="font-bold ${h.errorRate > 25 ? 'text-rose-600' : 'text-emerald-600'}">Sai ${h.errorRate}% (${h.correct}/${h.total})</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      renderQuiz();
+      openSummaryModal();
+    }
+
+    function startWrongOnlyCycle() {
+      const rt = curRuntime();
+      const wrongIds = rt.order.filter(qId => {
+        const a = rt.answers[qId];
+        return !a || !a.isCorrect;
+      });
+      if (wrongIds.length === 0) {
+        showToast("Không có câu sai nào trong chu kỳ vừa rồi!");
+        return;
+      }
+      startNewCycle(false, wrongIds, "wrong");
+    }
+
+    function startFlaggedOnlyCycle() {
+      const p = curPersisted();
+      if (p.flaggedIds.length === 0) {
+        showToast("Bạn chưa đánh dấu câu phân vân nào trong chương này.");
+        return;
+      }
+      startNewCycle(false, [...p.flaggedIds], "flagged");
+    }
+
+    function renderQuiz() {
+      const p = curPersisted();
+      const rt = curRuntime();
+      const total = rt.order.length;
+      const qId = rt.order[rt.currentIndex];
+      const q = getQuestionById(qId);
+      const ans = rt.answers[qId] || { selected: [], checked: false, isCorrect: false };
+      const isFlagged = p.flaggedIds.includes(qId);
+      const showFeedback = (session.quizMode === "practice" && ans.checked) || (session.quizMode === "exam" && rt.examGraded);
+
+      // Cycle Badge
+      const cycleLabel = rt.cycleType === "full"
+        ? `Chu kỳ #${p.cycleNumber} (${total} câu)`
+        : rt.cycleType === "wrong"
+          ? `Ôn câu sai (${total} câu)`
+          : `Ôn phân vân (${total} câu)`;
+      document.getElementById("cycle-badge").textContent = cycleLabel;
+
+      document.getElementById("btn-submit-exam").classList.toggle("hidden", !(session.quizMode === "exam" && !rt.examGraded));
+
+      // Exam Graded Banner
+      const banner = document.getElementById("exam-review-banner");
+      if (session.quizMode === "exam" && rt.examGraded) {
+        const correctCount = rt.order.filter(id => rt.answers[id]?.isCorrect).length;
+        const acc = Math.round((correctCount / total) * 100);
+        document.getElementById("exam-review-stats").textContent = `Đúng ${correctCount}/${total} câu (${acc}%) • Tỷ lệ sai: ${100 - acc}%`;
+        banner.classList.remove("hidden");
+      } else {
+        banner.classList.add("hidden");
+      }
+
+      // Progress & Live Stats
+      const answeredCount = rt.order.filter(id => {
+        const a = rt.answers[id];
+        if (!a) return false;
+        return session.quizMode === "practice" ? a.checked : a.selected.length > 0;
+      }).length;
+      const pct = Math.round((answeredCount / total) * 100);
+      document.getElementById("progress-text").textContent = `${answeredCount}/${total} câu (${pct}%)`;
+      document.getElementById("progress-bar").style.width = `${pct}%`;
+
+      const correctBadge = document.getElementById("live-correct-badge");
+      const wrongBadge = document.getElementById("live-wrong-badge");
+      if ((session.quizMode === "practice" && answeredCount > 0) || rt.examGraded) {
+        const checkedIds = rt.order.filter(id => rt.answers[id]?.checked);
+        const correctSoFar = checkedIds.filter(id => rt.answers[id].isCorrect).length;
+        const wrongSoFar = checkedIds.length - correctSoFar;
+        const errPct = checkedIds.length > 0 ? Math.round((wrongSoFar / checkedIds.length) * 100) : 0;
+
+        correctBadge.textContent = `Đúng: ${correctSoFar}`;
+        wrongBadge.textContent = `Sai: ${wrongSoFar} (${errPct}%)`;
+        correctBadge.classList.remove("hidden");
+        wrongBadge.classList.remove("hidden");
+      } else {
+        correctBadge.classList.add("hidden");
+        wrongBadge.classList.add("hidden");
+      }
+
+      // Card Meta
+      document.getElementById("q-position").textContent = `Câu ${rt.currentIndex + 1} / ${total}`;
+      document.getElementById("q-original-id").textContent = q.id;
+      document.getElementById("q-lo-badge").textContent = q.lo;
+
+      const typeBadge = document.getElementById("q-type-badge");
+      if (q.type === "multi") {
+        typeBadge.className = "px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200";
+        typeBadge.textContent = `Chọn ${q.selectCount} đáp án`;
+      } else {
+        typeBadge.className = "px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold";
+        typeBadge.textContent = "Chọn 1 đáp án";
+      }
+
+      // Flag Button
+      const btnFlag = document.getElementById("btn-flag");
+      const btnFlagText = document.getElementById("btn-flag-text");
+      if (isFlagged) {
+        btnFlag.className = "flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all bg-amber-100 border-amber-300 text-amber-900 shadow-xs";
+        btnFlagText.textContent = "Đã đánh dấu phân vân";
+      } else {
+        btnFlag.className = "flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all bg-white border-slate-200 text-slate-600 hover:bg-slate-50";
+        btnFlagText.textContent = "Phân vân / Chọn lụi";
+      }
+
+      document.getElementById("q-context").textContent = q.context;
+      document.getElementById("q-text").textContent = q.question;
+
+      // Options
+      const optionsEl = document.getElementById("q-options");
+      optionsEl.innerHTML = "";
+      q.options.forEach(opt => {
+        const isSelected = ans.selected.includes(opt.key);
+        const isCorrectOpt = q.correct.includes(opt.key);
+
+        let btnClasses = "w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 transition-all flex items-start gap-3 ";
+        let badgeClasses = "w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 ";
+
+        if (showFeedback) {
+          if (isCorrectOpt) {
+            btnClasses += "bg-emerald-50 border-emerald-500 text-emerald-950";
+            badgeClasses += "bg-emerald-600 text-white";
+          } else if (isSelected && !isCorrectOpt) {
+            btnClasses += "bg-rose-50 border-rose-400 text-rose-950";
+            badgeClasses += "bg-rose-500 text-white";
+          } else {
+            btnClasses += "bg-slate-50/70 border-slate-100 text-slate-400";
+            badgeClasses += "bg-slate-200 text-slate-500";
+          }
+        } else {
+          if (isSelected) {
+            btnClasses += "bg-violet-50 border-violet-500 text-violet-950 shadow-xs";
+            badgeClasses += "bg-violet-600 text-white";
+          } else {
+            btnClasses += "bg-white border-slate-200 hover:border-violet-300 hover:bg-slate-50 text-slate-800";
+            badgeClasses += "bg-slate-100 text-slate-600";
+          }
+        }
+
+        const btn = document.createElement("button");
+        btn.className = btnClasses;
+        btn.onclick = () => selectOption(opt.key);
+        btn.innerHTML = `
+          <span class="${badgeClasses}">${opt.key}</span>
+          <span class="text-sm sm:text-[15px] leading-snug font-medium flex-1">${opt.text}</span>
+          ${showFeedback && isCorrectOpt ? '<span class="text-emerald-600 font-bold text-sm shrink-0">✓</span>' : ''}
+          ${showFeedback && isSelected && !isCorrectOpt ? '<span class="text-rose-500 font-bold text-sm shrink-0">✕</span>' : ''}
+        `;
+        optionsEl.appendChild(btn);
+      });
+
+      document.getElementById("multi-check-wrap").classList.toggle("hidden", !(q.type === "multi" && session.quizMode === "practice" && !ans.checked));
+
+      // Explanation Box
+      const expBox = document.getElementById("explanation-box");
+      if (showFeedback) {
+        expBox.classList.remove("hidden");
+        const statusBadge = document.getElementById("exp-status-badge");
+        if (ans.isCorrect) {
+          expBox.className = "mt-6 p-4 sm:p-5 rounded-2xl border bg-emerald-50/70 border-emerald-200";
+          statusBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white";
+          statusBadge.textContent = "Chính xác!";
+        } else {
+          expBox.className = "mt-6 p-4 sm:p-5 rounded-2xl border bg-rose-50/70 border-rose-200";
+          statusBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-600 text-white";
+          statusBadge.textContent = "Chưa đúng";
+        }
+        document.getElementById("exp-lo-tag").textContent = q.lo;
+        document.getElementById("exp-correct-answer").textContent = `Đáp án đúng: ${q.correct.join(", ")}`;
+        document.getElementById("exp-text").textContent = q.explanation;
+      } else {
+        expBox.classList.add("hidden");
+      }
+
+      document.getElementById("btn-prev").disabled = rt.currentIndex === 0;
+      document.getElementById("btn-next").textContent = rt.currentIndex === total - 1
+        ? (rt.examGraded ? "Xem tổng kết" : (session.quizMode === "exam" ? "Nộp bài & Chấm điểm ✓" : "Hoàn thành chu kỳ ✓"))
+        : "Câu tiếp →";
+    }
+
+    // =========================================================================
+    // 7. MODALS & DRAWERS
+    // =========================================================================
+    function openNavigatorDrawer() {
+      const rt = curRuntime();
+      const p = curPersisted();
+      const grid = document.getElementById("nav-grid");
+      grid.innerHTML = "";
+      document.getElementById("nav-modal-subtitle").textContent = `${curMeta().short} • Đang ở câu ${rt.currentIndex + 1} / ${rt.order.length}`;
+
+      rt.order.forEach((id, idx) => {
+        const a = rt.answers[id];
+        const flagged = p.flaggedIds.includes(id);
+        let cls = "h-10 rounded-xl text-xs font-bold transition-all relative flex items-center justify-center border ";
+        if (idx === rt.currentIndex) cls += "ring-2 ring-slate-900 ring-offset-1 ";
+
+        if (a && (session.quizMode === "practice" ? a.checked : rt.examGraded)) {
+          cls += a.isCorrect ? "bg-emerald-500 text-white border-emerald-600" : "bg-rose-500 text-white border-rose-600";
+        } else if (a && a.selected.length > 0) {
+          cls += "bg-violet-500 text-white border-violet-600";
+        } else {
+          cls += "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100";
+        }
+
+        const btn = document.createElement("button");
+        btn.className = cls;
+        btn.onclick = () => jumpToQuestion(idx);
+        btn.innerHTML = `${idx + 1}${flagged ? '<span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-400 border-2 border-white"></span>' : ''}`;
+        grid.appendChild(btn);
+      });
+
+      document.getElementById("navigator-modal").classList.remove("hidden");
+    }
+
+    function closeNavigatorDrawer() { document.getElementById("navigator-modal").classList.add("hidden"); }
+
+    function openFlaggedDrawer() {
+      const p = curPersisted();
+      const count = p.flaggedIds.length;
+      document.getElementById("flagged-modal-title").textContent = `Câu Phân vân / Chọn lụi — ${curMeta().short}`;
+      document.getElementById("flagged-modal-count").textContent = `${count} câu đã đánh dấu`;
+      document.getElementById("btn-practice-flagged-modal").disabled = count === 0;
+
+      const listEl = document.getElementById("flagged-modal-list");
+      if (count === 0) {
+        listEl.innerHTML = `<p class="text-sm text-slate-400 italic py-8 text-center">Chưa có câu nào được đánh dấu trong ${curMeta().short}.</p>`;
+      } else {
+        listEl.innerHTML = p.flaggedIds.map(id => {
+          const q = getQuestionById(id);
+          if (!q) return "";
+          return `
+            <div class="p-4 rounded-2xl border border-amber-200 bg-amber-50/40 flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+              <div class="space-y-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-md bg-slate-900 text-white text-[11px] font-bold">${q.id}</span>
+                  <span class="px-2 py-0.5 rounded-md bg-violet-50 text-violet-700 text-[11px] font-semibold">${q.lo}</span>
+                  <span class="text-xs font-bold text-emerald-700">Đáp án: ${q.correct.join(", ")}</span>
+                </div>
+                <p class="text-sm font-semibold text-slate-900">${q.question}</p>
+                <p class="text-xs text-slate-600 leading-relaxed">${q.explanation}</p>
+              </div>
+              <button onclick="removeFlagged('${q.id}')" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-xs font-semibold text-slate-600 shrink-0">
+                Bỏ đánh dấu
+              </button>
+            </div>
+          `;
+        }).join("");
+      }
+
+      document.getElementById("flagged-modal").classList.remove("hidden");
+    }
+
+    function closeFlaggedDrawer() { document.getElementById("flagged-modal").classList.add("hidden"); }
+
+    function removeFlagged(qId) {
+      const ch = curCh();
+      const p = curPersisted();
+      p.flaggedIds = p.flaggedIds.filter(id => id !== qId);
+      saveChapterPersisted(ch);
+      updateFlagCounter();
+      openFlaggedDrawer();
+      renderQuiz();
+    }
+
+    function openHistoryModal() {
+      const p = curPersisted();
+      document.getElementById("history-modal-title").textContent = `Lịch sử chu kỳ ôn tập — ${curMeta().short}`;
+      const body = document.getElementById("history-modal-body");
+
+      if (p.cycleHistory.length === 0) {
+        body.innerHTML = `<p class="text-sm text-slate-400 italic py-8 text-center">Chưa có chu kỳ nào hoàn thành trong ${curMeta().short}.</p>`;
+      } else {
+        body.innerHTML = `
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-500">
+                  <th class="py-2.5 pr-3 font-semibold">Chu kỳ</th>
+                  <th class="py-2.5 px-3 font-semibold">Thời gian</th>
+                  <th class="py-2.5 px-3 font-semibold">Chế độ</th>
+                  <th class="py-2.5 px-3 font-semibold">Đúng</th>
+                  <th class="py-2.5 px-3 font-semibold">Tỷ lệ sai</th>
+                  <th class="py-2.5 pl-3 font-semibold">Phân vân</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${p.cycleHistory.map(h => `
+                  <tr>
+                    <td class="py-2.5 pr-3 font-bold text-slate-800">${h.cycle}</td>
+                    <td class="py-2.5 px-3 text-slate-500">${h.date}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${h.mode}</td>
+                    <td class="py-2.5 px-3 font-semibold text-emerald-700">${h.correct}/${h.total}</td>
+                    <td class="py-2.5 px-3 font-bold ${h.errorRate > 25 ? 'text-rose-600' : 'text-emerald-600'}">${h.errorRate}%</td>
+                    <td class="py-2.5 pl-3 text-amber-700 font-semibold">${h.flagged}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      cancelResetConfirm();
+      document.getElementById("history-modal").classList.remove("hidden");
+    }
+
+    function closeHistoryModal() { document.getElementById("history-modal").classList.add("hidden"); }
+
+    function showResetConfirm() {
+      document.getElementById("reset-confirm-area").innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-600">Xóa dữ liệu ${curMeta().short}?</span>
+          <button onclick="confirmResetChapter()" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white text-xs font-semibold">Xóa</button>
+          <button onclick="cancelResetConfirm()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-semibold">Hủy</button>
+        </div>
+      `;
+    }
+
+    function cancelResetConfirm() {
+      const area = document.getElementById("reset-confirm-area");
+      if (area) {
+        area.innerHTML = `
+          <button onclick="showResetConfirm()" class="text-xs font-semibold text-rose-600 hover:text-rose-800 underline">
+            Đặt lại dữ liệu chương này
+          </button>
+        `;
+      }
+    }
+
+    function confirmResetChapter() {
+      const ch = curCh();
+      persisted[ch] = createEmptyPersisted();
+      saveChapterPersisted(ch);
+      updateFlagCounter();
+      closeHistoryModal();
+      startNewCycle(false);
+      renderFlashcard();
+      showToast(`Đã đặt lại toàn bộ dữ liệu ${curMeta().short}.`);
+    }
+
+    function openSummaryModal() { document.getElementById("summary-modal").classList.remove("hidden"); }
+    function closeSummaryModal() { document.getElementById("summary-modal").classList.add("hidden"); }
+    function closeAllModals() {
+      closeSummaryModal();
+      closeNavigatorDrawer();
+      closeFlaggedDrawer();
+      closeHistoryModal();
+    }
+
+    // =========================================================================
+    // 8. FLASHCARDS ENGINE (16 CARDS PER CHAPTER, 3 FILTERS)
+    // =========================================================================
+    function getActiveFlashcardIds() {
+      const p = curPersisted();
+      const rt = curRuntime();
+      if (rt.fcFilter === "review") {
+        return rt.fcOrder.filter(id => p.fcStatus[id] !== "mastered");
+      }
+      if (rt.fcFilter === "mastered") {
+        return rt.fcOrder.filter(id => p.fcStatus[id] === "mastered");
+      }
+      return rt.fcOrder;
+    }
+
+    function setFlashcardFilter(filter) {
+      const rt = curRuntime();
+      rt.fcFilter = filter;
+      rt.fcIndex = 0;
+      rt.fcFlipped = false;
+
+      ["all", "review", "mastered"].forEach(f => {
+        const btn = document.getElementById(`fc-filter-${f}`);
+        if (f === filter) {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-violet-700 shadow-sm";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600";
+        }
+      });
+      renderFlashcard();
+    }
+
+    function shuffleFlashcards() {
+      const rt = curRuntime();
+      rt.fcOrder = shuffleArray(rt.fcOrder);
+      rt.fcIndex = 0;
+      rt.fcFlipped = false;
+      renderFlashcard();
+      showToast(`Đã xáo trộn 16 Flashcards ${curMeta().short}!`);
+    }
+
+    function flipFlashcard() {
+      const rt = curRuntime();
+      rt.fcFlipped = !rt.fcFlipped;
+      document.getElementById("fc-card").classList.toggle("rotate-y-180", rt.fcFlipped);
+    }
+
+    function markFlashcard(status) {
+      const list = getActiveFlashcardIds();
+      if (list.length === 0) return;
+
+      const ch = curCh();
+      const p = curPersisted();
+      const rt = curRuntime();
+      const fcId = list[rt.fcIndex];
+      p.fcStatus[fcId] = status;
+      saveChapterPersisted(ch);
+
+      showToast(status === "mastered" ? "Đã đánh dấu: Đã nhớ ✓" : "Đã đánh dấu: Cần ôn lại");
+      rt.fcFlipped = false;
+
+      const nextList = getActiveFlashcardIds();
+      if (rt.fcIndex >= nextList.length) {
+        rt.fcIndex = Math.max(0, nextList.length - 1);
+      } else if (rt.fcFilter === "all" && rt.fcIndex < nextList.length - 1) {
+        rt.fcIndex++;
+      }
+      renderFlashcard();
+    }
+
+    function prevFlashcard() {
+      const list = getActiveFlashcardIds();
+      if (list.length === 0) return;
+      const rt = curRuntime();
+      rt.fcIndex = (rt.fcIndex - 1 + list.length) % list.length;
+      rt.fcFlipped = false;
+      renderFlashcard();
+    }
+
+    function nextFlashcard() {
+      const list = getActiveFlashcardIds();
+      if (list.length === 0) return;
+      const rt = curRuntime();
+      rt.fcIndex = (rt.fcIndex + 1) % list.length;
+      rt.fcFlipped = false;
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const p = curPersisted();
+      const rt = curRuntime();
+      const allCards = curFlashcards();
+      const totalAll = allCards.length;
+      const masteredCount = allCards.filter(f => p.fcStatus[f.id] === "mastered").length;
+      const reviewCount = totalAll - masteredCount;
+      const pct = Math.round((masteredCount / totalAll) * 100);
+
+      document.getElementById("fc-total-count").textContent = totalAll;
+      document.getElementById("fc-review-count").textContent = reviewCount;
+      document.getElementById("fc-mastered-count").textContent = masteredCount;
+      document.getElementById("fc-mastered-stats").textContent = `Tiến độ đã nhớ: ${masteredCount} / ${totalAll} (${pct}%)`;
+      document.getElementById("fc-progress-bar").style.width = `${pct}%`;
+
+      // Sync filter button UI
+      ["all", "review", "mastered"].forEach(f => {
+        const btn = document.getElementById(`fc-filter-${f}`);
+        if (f === rt.fcFilter) {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-violet-700 shadow-sm";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600";
+        }
+      });
+
+      const list = getActiveFlashcardIds();
+      document.getElementById("fc-card").classList.toggle("rotate-y-180", rt.fcFlipped);
+
+      if (list.length === 0) {
+        document.getElementById("fc-position").textContent = "0 / 0";
+        document.getElementById("fc-front-tag").textContent = curMeta().short;
+        document.getElementById("fc-status-pill").className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600";
+        document.getElementById("fc-status-pill").textContent = "Danh sách trống";
+        document.getElementById("fc-front-text").textContent = rt.fcFilter === "mastered"
+          ? "Bạn chưa đánh dấu thẻ nào là 'Đã nhớ'."
+          : `Tuyệt vời! Bạn đã nhớ hết toàn bộ 16 Flashcards ${curMeta().short}.`;
+        document.getElementById("fc-back-text").textContent = "Hãy chuyển bộ lọc sang 'Tất cả' để xem lại toàn bộ thẻ.";
+        document.getElementById("fc-back-tag").textContent = "";
+        return;
+      }
+
+      if (rt.fcIndex >= list.length) rt.fcIndex = 0;
+      const fc = allCards.find(f => f.id === list[rt.fcIndex]);
+      const status = p.fcStatus[fc.id];
+
+      document.getElementById("fc-position").textContent = `Thẻ ${rt.fcIndex + 1} / ${list.length}`;
+      document.getElementById("fc-front-tag").textContent = `${fc.id} • ${fc.tag}`;
+      document.getElementById("fc-back-tag").textContent = fc.tag;
+      document.getElementById("fc-front-text").textContent = fc.front;
+      document.getElementById("fc-back-text").textContent = fc.back;
+
+      const pill = document.getElementById("fc-status-pill");
+      if (status === "mastered") {
+        pill.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700";
+        pill.textContent = "✓ Đã nhớ";
+      } else if (status === "review") {
+        pill.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-900";
+        pill.textContent = "Cần ôn lại";
+      } else {
+        pill.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500";
+        pill.textContent = "Chưa đánh giá";
+      }
+    }
+
+    // =========================================================================
+    // 9. KEYBOARD SHORTCUTS & INITIALIZATION
+    // =========================================================================
+    document.addEventListener("keydown", (e) => {
+      const anyModalOpen =
+        !document.getElementById("summary-modal").classList.contains("hidden") ||
+        !document.getElementById("navigator-modal").classList.contains("hidden") ||
+        !document.getElementById("flagged-modal").classList.contains("hidden") ||
+        !document.getElementById("history-modal").classList.contains("hidden");
+
+      if (anyModalOpen) {
+        if (e.key === "Escape") closeAllModals();
+        return;
+      }
+
+      if (session.activeTab === "quiz") {
+        if (e.key === "ArrowLeft") prevQuestion();
+        if (e.key === "ArrowRight") nextQuestion();
+      } else if (session.activeTab === "flashcards") {
+        if (e.code === "Space") {
+          e.preventDefault();
+          flipFlashcard();
+        } else if (e.key === "ArrowLeft") {
+          prevFlashcard();
+        } else if (e.key === "ArrowRight") {
+          nextFlashcard();
+        }
+      }
+    });
+
+    // Boot both chapters
+    loadChapterPersisted("c9");
+    loadChapterPersisted("c10");
+    session.runtime.c9.order = shuffleArray(CHAPTER_QUESTIONS.c9.map(q => q.id));
+    session.runtime.c10.order = shuffleArray(CHAPTER_QUESTIONS.c10.map(q => q.id));
+    updateFlagCounter();
+    renderQuiz();
+  </script>
+</body>
+</html>
